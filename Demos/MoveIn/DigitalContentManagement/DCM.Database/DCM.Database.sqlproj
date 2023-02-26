@@ -3,16 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>PM.Database</Name>
+    <Name>DCM.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{765e30ba-3f4b-428c-843b-58b83b57a9b6}</ProjectGuid>
+    <ProjectGuid>{cb7ea443-f349-4d0d-a9c8-452605f0e928}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>PM.Database</RootNamespace>
-    <AssemblyName>PM.Database</AssemblyName>
+    <RootNamespace>DCM.Database</RootNamespace>
+    <AssemblyName>DCM.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -22,7 +22,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
-    <DefaultSchema>PM</DefaultSchema>
+    <DefaultSchema>DCM</DefaultSchema>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -60,47 +60,27 @@
     <Folder Include="Properties" />
     <Folder Include="Schemas" />
     <Folder Include="Tables" />
-    <Folder Include="Tables\PM" />
     <Folder Include="Tables\Core" />
     <Folder Include="Scripts" />
+    <Folder Include="Tables\DCM" />
     <Folder Include="Scripts\Populate" />
+    <Folder Include="Scripts\Populate\Core" />
+    <Folder Include="Scripts\Populate\DCM" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="Schemas\DCM.sql" />
     <Build Include="Schemas\Core.sql" />
-    <Build Include="Schemas\PM.sql" />
     <Build Include="Tables\Core\RowStatus.sql" />
-    <Build Include="Tables\Core\Country.sql" />
-    <Build Include="Tables\Core\CountryDivision.sql" />
-    <Build Include="Tables\Core\Language.sql" />
+    <Build Include="Tables\DCM\Content.sql" />
+    <Build Include="Tables\DCM\ContentCopy.sql" />
     <Build Include="Tables\Core\LanguageCulture.sql" />
-    <Build Include="Tables\Core\WorldRegion.sql" />
-    <None Include="Scripts\Populate\Populate_Country.sql" />
-    <None Include="Scripts\Populate\Populate_CountryDivision.sql" />
-    <None Include="Scripts\Populate\Populate_Language.sql" />
-    <None Include="Scripts\Populate\Populate_LanguageCulture.sql" />
-    <None Include="Scripts\Populate\Populate_RowStatus.sql" />
-    <None Include="Scripts\Populate\Populate_WorldRegion.sql" />
-    <Build Include="Tables\PM\CareType.sql" />
-    <Build Include="Tables\PM\Community.sql" />
-    <Build Include="Tables\PM\CommunityCareType.sql" />
-    <Build Include="Tables\PM\CommunityPhoneNumber.sql" />
-    <Build Include="Tables\PM\CommunityPostalAddress.sql" />
-    <Build Include="Tables\PM\CommunityRoomType.sql" />
-    <Build Include="Tables\PM\CommunityStatus.sql" />
-    <Build Include="Tables\PM\CommunityStructure.sql" />
-    <Build Include="Tables\PM\CommunityStructureType.sql" />
-    <Build Include="Tables\PM\PayorType.sql" />
-    <Build Include="Tables\PM\PhoneNumberType.sql" />
-    <Build Include="Tables\PM\PostalAddressType.sql" />
-    <Build Include="Tables\PM\Room.sql" />
-    <Build Include="Tables\PM\RoomAvailability.sql" />
-    <Build Include="Tables\PM\RoomCareType.sql" />
-    <Build Include="Tables\PM\RoomHistory.sql" />
-    <Build Include="Tables\PM\RoomRate.sql" />
-    <Build Include="Tables\PM\RoomRateHistory.sql" />
-    <Build Include="Tables\PM\RoomStyle.sql" />
-    <Build Include="Tables\PM\RoomType.sql" />
-    <Build Include="Tables\PM\RoomTypeCategory.sql" />
+    <Build Include="Tables\Core\Language.sql" />
+    <Build Include="Tables\DCM\DigitalAssetType.sql" />
+    <Build Include="Tables\DCM\DigitalAsset.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Language.sql" />
+    <None Include="Scripts\Populate\Core\Populate_LanguageCulture.sql" />
+    <None Include="Scripts\Populate\Core\Populate_RowStatus.sql" />
+    <None Include="Scripts\Populate\DCM\Populate_DigitalAssetType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
