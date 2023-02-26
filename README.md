@@ -1,3 +1,6 @@
+![File New: Build a Event-Driven Architected Microservice from Scratch](Thumbnail.png)
+
+
 # File New: Build a Event-Driven Architected Microservice from Scratch
 
 ## Abstract
@@ -7,7 +10,7 @@ Event-driven microservice architectures provide a versatile approach to designin
 Starting with an empty Visual Studio solution, during this session we will build an event-driven architected microservice solution to solve a real-world problem.
 
 # Type
-* 60/75-minute session
+* 45/60/75-minute session
 
 ## Tags
 * .NET
@@ -35,4 +38,4 @@ Starting with an empty Visual Studio solution, during this session we will build
 
 | Event | Location | Date | Time | Room | Downloads |
 |-------|:--------:|-----:|-----:|-----:|----------:|
-This session has not been scheduled yet
+| [Serverless Architecture Conference](https://serverless-architecture.io/london/) | London, UK | April 25, 2023 | 16:15 BST | TBA | Available Afterwards |
