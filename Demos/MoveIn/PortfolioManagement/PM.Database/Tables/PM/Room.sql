@@ -23,8 +23,8 @@
 	CONSTRAINT fkRoom_CommunityStructure FOREIGN KEY (CommunityStructureId) REFERENCES PM.CommunityStructure (CommunityStructureId),
 	CONSTRAINT fkRoom_RoomAvailability   FOREIGN KEY (RoomAvailabilityId)   REFERENCES PM.RoomAvailability (RoomAvailabilityId),
 	CONSTRAINT fkRoom_RoomType           FOREIGN KEY (RoomTypeId)           REFERENCES PM.RoomType (RoomTypeId),
-	CONSTRAINT fkRoom_Content            FOREIGN KEY (ContentId)            REFERENCES PM.Content (ContentId),
-	CONSTRAINT fkRoom_DigitalAsset       FOREIGN KEY (FloorPlanId)          REFERENCES PM.DigitalAsset (DigitalAssetId),
+	CONSTRAINT fkRoom_Content            FOREIGN KEY (ContentId)            REFERENCES DCM.Content (ContentId),
+	CONSTRAINT fkRoom_DigitalAsset       FOREIGN KEY (FloorPlanId)          REFERENCES DCM.DigitalAsset (DigitalAssetId),
 	CONSTRAINT fkRoom_CareType           FOREIGN KEY (AssignedCareTypeId)   REFERENCES PM.CareType (CareTypeId)
 ) WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = PM.RoomHistory))
 GO

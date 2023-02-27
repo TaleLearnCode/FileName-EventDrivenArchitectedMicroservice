@@ -1,7 +1,8 @@
-﻿-- Standard Population Scripts
-:r .\Populate\Core\Populate_RowStatus.sql
-:r .\Populate\Core\Populate_WorldRegion.sql
-:r .\Populate\Core\Populate_Country.sql
-:r .\Populate\Core\Populate_CountryDivision.sql
-:r .\Populate\Core\Populate_Language.sql
-:r .\Populate\Core\Populate_LanguageCulture.sql
+﻿---- Standard Population Scripts
+:r .\Core\Populate\Populate_RowStatus.sql
+
+
+---- Customer Data Population Scripts
+:r .\PM\CustomerData\CustomerData_PayorType.sql
+:r .\PM\CustomerData\CustomerData_CommunityStatus.sql
+:r .\PM\CustomerData\CustomerData_Community.sql

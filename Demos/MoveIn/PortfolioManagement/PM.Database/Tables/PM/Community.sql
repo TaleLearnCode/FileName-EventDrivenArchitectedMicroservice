@@ -15,10 +15,10 @@
   IsFeatured               BIT           NOT NULL CONSTRAINT dfCommunity_IsFeatured DEFAULT(0),
   RowStatusId              INT           NOT NULL CONSTRAINT dfCommunity_RowStatus DEFAULT(1),
   CONSTRAINT pkcCommunity PRIMARY KEY CLUSTERED (CommunityId),
-  CONSTRAINT fkCommunity_LanguageCultureCode FOREIGN KEY (LanguageCultureCode) REFERENCES PM.LanguageCulture (LanguageCultureCode),
-  CONSTRAINT fkCommunity_Content           FOREIGN KEY (OverviewId)            REFERENCES PM.Content (ContentId),
-  CONSTRAINT fkCommunity_Country           FOREIGN KEY (CountryCode)           REFERENCES PM.Country (CountryCode),
-  CONSTRAINT fkCommunity_DigitalAsset      FOREIGN KEY (ProfileImageId)        REFERENCES PM.DigitalAsset (DigitalAssetId),
+  CONSTRAINT fkCommunity_LanguageCultureCode FOREIGN KEY (LanguageCultureCode) REFERENCES Core.LanguageCulture (LanguageCultureCode),
+  CONSTRAINT fkCommunity_Content           FOREIGN KEY (OverviewId)            REFERENCES DCM.Content (ContentId),
+  CONSTRAINT fkCommunity_Country           FOREIGN KEY (CountryCode)           REFERENCES Core.Country (CountryCode),
+  CONSTRAINT fkCommunity_DigitalAsset      FOREIGN KEY (ProfileImageId)        REFERENCES DCM.DigitalAsset (DigitalAssetId),
   CONSTRAINT fkCommunity_CommunityStatus   FOREIGN KEY (CommunityStatusId)     REFERENCES PM.CommunityStatus (CommunityStatusId),
   CONSTRAINT unqCommunity_CommunityNumber  UNIQUE(CommunityNumber)
 )

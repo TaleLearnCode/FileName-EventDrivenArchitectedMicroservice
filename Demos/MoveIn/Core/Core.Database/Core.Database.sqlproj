@@ -79,7 +79,7 @@
     <None Include="Scripts\Populate\Populate_LanguageCulture.sql" />
     <None Include="Scripts\Populate\Populate_WorldRegion.sql" />
     <None Include="Scripts\Populate\Populate_RowStatus.sql" />
-    <None Include="Publish_Local.publish.xml" />
+    <None Include="Beast.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

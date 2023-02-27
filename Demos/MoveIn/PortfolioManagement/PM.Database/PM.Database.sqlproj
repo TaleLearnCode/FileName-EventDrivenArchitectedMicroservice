@@ -64,6 +64,12 @@
     <Folder Include="Tables\Core" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Populate" />
+    <Folder Include="Tables\DCM" />
+    <Folder Include="Scripts\Populate\Core" />
+    <Folder Include="Scripts\Populate\DCM" />
+    <Folder Include="Scripts\CustomerData" />
+    <Folder Include="Scripts\CustomerData\PM" />
+    <Folder Include="Scripts\Populate\PM" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\Core.sql" />
@@ -74,12 +80,6 @@
     <Build Include="Tables\Core\Language.sql" />
     <Build Include="Tables\Core\LanguageCulture.sql" />
     <Build Include="Tables\Core\WorldRegion.sql" />
-    <None Include="Scripts\Populate\Populate_Country.sql" />
-    <None Include="Scripts\Populate\Populate_CountryDivision.sql" />
-    <None Include="Scripts\Populate\Populate_Language.sql" />
-    <None Include="Scripts\Populate\Populate_LanguageCulture.sql" />
-    <None Include="Scripts\Populate\Populate_RowStatus.sql" />
-    <None Include="Scripts\Populate\Populate_WorldRegion.sql" />
     <Build Include="Tables\PM\CareType.sql" />
     <Build Include="Tables\PM\Community.sql" />
     <Build Include="Tables\PM\CommunityCareType.sql" />
@@ -101,11 +101,43 @@
     <Build Include="Tables\PM\RoomStyle.sql" />
     <Build Include="Tables\PM\RoomType.sql" />
     <Build Include="Tables\PM\RoomTypeCategory.sql" />
+    <Build Include="Tables\DCM\Content.sql" />
+    <Build Include="Tables\DCM\ContentCopy.sql" />
+    <Build Include="Tables\DCM\DigitalAsset.sql" />
+    <Build Include="Tables\DCM\DigitalAssetType.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Country.sql" />
+    <None Include="Scripts\Populate\Core\Populate_CountryDivision.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Language.sql" />
+    <None Include="Scripts\Populate\Core\Populate_LanguageCulture.sql" />
+    <None Include="Scripts\Populate\Core\Populate_RowStatus.sql" />
+    <None Include="Scripts\Populate\Core\Populate_WorldRegion.sql" />
+    <None Include="Scripts\Populate\DCM\Populate_DigitalAssetType.sql" />
+    <Build Include="Schemas\DCM.sql" />
+    <None Include="Scripts\Populate\PM\Populate_PostalAddressType.sql" />
+    <None Include="Scripts\Populate\PM\Populate_PhoneNumberType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Local.publish.xml" />
+    <None Include="Beast.publish.xml" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CareType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_Community.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityCareType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityPhoneNumber.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityPostalAddress.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityRoomType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityStatus.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityStructure.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityStructureType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_PayorType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_PostalAddress.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_Room.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomAvailability.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomCareType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomRate.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomStyle.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_RoomTypeCategory.sql" />
   </ItemGroup>
 </Project>
