@@ -5,3 +5,5 @@
 :r .\Populate\Populate_CountryDivision.sql
 :r .\Populate\Populate_Language.sql
 :r .\Populate\Populate_LanguageCulture.sql
+:r .\Populate\Populate_Prefix.sql
+:r .\Populate\Populate_Suffix.sql

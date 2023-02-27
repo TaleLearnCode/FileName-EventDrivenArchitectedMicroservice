@@ -3,12 +3,10 @@
   CommunityId              INT           NOT NULL,
   CommunityNumber          NVARCHAR(50)  NOT NULL,
   CommunityName            NVARCHAR(200) NOT NULL,
-  CountryCode              CHAR(2)           NULL,
   ProfileImageUrl          NVARCHAR(500)     NULL,
   CommunityStatusId        INT           NOT NULL,
   RowStatusId              INT           NOT NULL,
   CONSTRAINT pkcCommunity PRIMARY KEY CLUSTERED (CommunityId),
-  CONSTRAINT fkCommunity_Country           FOREIGN KEY (CountryCode)           REFERENCES Core.Country (CountryCode),
   CONSTRAINT fkCommunity_CommunityStatus   FOREIGN KEY (CommunityStatusId)     REFERENCES PM.CommunityStatus (CommunityStatusId),
   CONSTRAINT unqCommunity_CommunityNumber  UNIQUE(CommunityNumber)
 )
@@ -25,8 +23,6 @@ GO
 EXEC sp_addextendedproperty @level0name=N'PM', @level1name=N'Community', @level2name=N'CommunityNumber',                      @value=N'The tenant''s number (identifier) for the community.',                                                     @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'COLUMN';
 GO
 EXEC sp_addextendedproperty @level0name=N'PM', @level1name=N'Community', @level2name=N'CommunityName',                        @value=N'The name of the community.',                                                                               @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'COLUMN';
-GO
-EXEC sp_addextendedproperty @level0name=N'PM', @level1name=N'Community', @level2name=N'CountryCode',                          @value=N'Identifier of the country the community is located in.',                                                   @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'COLUMN';
 GO
 EXEC sp_addextendedproperty @level0name=N'PM', @level1name=N'Community', @level2name=N'ProfileImageUrl',                      @value=N'URL of the digital asset that serves as the profile image for the community.',                             @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'COLUMN';
 GO

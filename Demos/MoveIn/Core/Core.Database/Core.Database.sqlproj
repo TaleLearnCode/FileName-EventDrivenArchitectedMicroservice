@@ -71,6 +71,8 @@
     <Build Include="Tables\LanguageCulture.sql" />
     <Build Include="Tables\RowStatus.sql" />
     <Build Include="Tables\WorldRegion.sql" />
+    <Build Include="Tables\Prefix.sql" />
+    <Build Include="Tables\Suffix.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Populate\Populate_Country.sql" />
@@ -80,6 +82,8 @@
     <None Include="Scripts\Populate\Populate_WorldRegion.sql" />
     <None Include="Scripts\Populate\Populate_RowStatus.sql" />
     <None Include="Beast.publish.xml" />
+    <None Include="Scripts\Populate\Populate_Prefix.sql" />
+    <None Include="Scripts\Populate\Populate_Suffix.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

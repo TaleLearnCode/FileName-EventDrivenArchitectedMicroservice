@@ -115,6 +115,13 @@
     <Build Include="Schemas\DCM.sql" />
     <None Include="Scripts\Populate\PM\Populate_PostalAddressType.sql" />
     <None Include="Scripts\Populate\PM\Populate_PhoneNumberType.sql" />
+    <Build Include="Tables\PM\CareLevel.sql" />
+    <Build Include="Tables\PM\CommunityCareLevel.sql" />
+    <Build Include="Tables\PM\CommunityCareLevelHistory.sql" />
+    <Build Include="Tables\PM\AncillaryCare.sql" />
+    <Build Include="Tables\PM\AncillaryCareCategory.sql" />
+    <Build Include="Tables\PM\CommunityAncillaryCare.sql" />
+    <Build Include="Schemas\RM.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
