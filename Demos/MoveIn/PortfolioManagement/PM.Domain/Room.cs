@@ -54,7 +54,7 @@ public partial class Room
 	/// <summary>
 	/// The size of the room. The measurement type is based off of Community.RoomMeasurement.
 	/// </summary>
-	public decimal? RoomArea { get; set; }
+	public int? RoomArea { get; set; }
 	/// <summary>
 	/// Identifier of the digital asset representing the floor plan for the room when it differs from the room type&apos;s floor plan.
 	/// </summary>

@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>SLS.PM</RootNamespace>
+    <RootNamespace>SLS.PM.Services</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Services\Common.Services.csproj" />
+    <ProjectReference Include="..\PM.Data\PM.Data.csproj" />
+  </ItemGroup>
 
 </Project>

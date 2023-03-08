@@ -44,9 +44,7 @@ internal static partial class CreateModel
 
 			entity.Property(e => e.IsFeatured).HasComment("Flag indicating whether the room is considered as featured.");
 
-			entity.Property(e => e.RoomArea)
-					.HasColumnType("decimal(7, 2)")
-					.HasComment("The size of the room. The measurement type is based off of Community.RoomMeasurement.");
+			entity.Property(e => e.RoomArea).HasComment("The size of the room. The measurement type is based off of Community.RoomMeasurement.");
 
 			entity.Property(e => e.RoomAvailabilityId).HasComment("Identifier of the associated room availability record.");
 

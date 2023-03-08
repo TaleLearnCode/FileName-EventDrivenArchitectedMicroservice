@@ -10,7 +10,7 @@
 	RoomAvailabilityId   INT                                                NOT NULL,
 	RoomTypeId           INT                                                NOT NULL,
 	ContentId            INT                                                    NULL,
-	RoomArea             DECIMAL(7,2)                                           NULL,
+	RoomArea             INT                                                    NULL,
 	FloorPlanId          INT                                                    NULL,
 	AssignedCareTypeId   INT                                                    NULL,
 	SortOrder            INT                                                    NULL,

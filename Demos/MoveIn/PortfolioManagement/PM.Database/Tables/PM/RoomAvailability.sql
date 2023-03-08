@@ -1,13 +1,15 @@
 ﻿CREATE TABLE PM.RoomAvailability
 (
-	RoomAvailabilityId   INT           NOT NULL IDENTITY(1,1),
-	RoomAvailabilityName NVARCHAR(100) NOT NULL,
-	ExternalId           NVARCHAR(100)     NULL,
-	SortOrder            INT               NULL,
-	ShowAsAvailable      BIT           NOT NULL CONSTRAINT dfRoomAvailability_ShowAsAvailable DEFAULT(0),
-	ShowAsReserved       BIT           NOT NULL CONSTRAINT dfRoomAvailability_ShowAsReserved  DEFAULT(0),
-	RowStatusId          INT           NOT NULL CONSTRAINT dfRoomAvailability_RowStatus       DEFAULT(1),
-	CONSTRAINT pkcRoomAvailability PRIMARY KEY CLUSTERED (RoomAvailabilityId)
+  RoomAvailabilityId   INT           NOT NULL IDENTITY(1,1),
+  RoomAvailabilityName NVARCHAR(100) NOT NULL,
+  ExternalId           NVARCHAR(100)     NULL,
+  ForegroundColor      CHAR(6)           NULL,
+  BackgroundColor      CHAR(6)           NULL,
+  ShowAsAvailable      BIT           NOT NULL CONSTRAINT dfRoomAvailability_ShowAsAvailable DEFAULT(0),
+  ShowAsReserved       BIT           NOT NULL CONSTRAINT dfRoomAvailability_ShowAsReserved  DEFAULT(0),
+  SortOrder            INT               NULL,
+  RowStatusId          INT           NOT NULL CONSTRAINT dfRoomAvailability_RowStatus       DEFAULT(1),
+  CONSTRAINT pkcRoomAvailability PRIMARY KEY CLUSTERED (RoomAvailabilityId)
 )
 GO
 

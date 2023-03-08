@@ -25,6 +25,8 @@ public partial class RoomAvailability
 	/// <summary>
 	/// The sort order of the room availability type within the full listing of room availability types.
 	/// </summary>
+	public string? ForegroundColor { get; set; }
+	public string? BackgroundColor { get; set; }
 	public int? SortOrder { get; set; }
 	/// <summary>
 	/// Flag indicating whether the room availability type is shown as available.
