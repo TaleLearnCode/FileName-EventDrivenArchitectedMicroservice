@@ -1,14 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SLS.Common.Services;
-using SLS.Common.Services.Extensions;
-using SLS.Common.Services.Responses;
-using SLS.PM.Data;
-using SLS.PM.Domain;
-using SLS.PM.Services.Responses;
+﻿namespace SLS.PM.Services;
 
-namespace SLS.PM.Services;
-
-public class RoomServices : ServicesBase
+public class RoomServices : ServicesBase, IRoomServices
 {
 
 	public RoomServices(string connectionString) : base(connectionString) { }
@@ -112,6 +104,21 @@ public class RoomServices : ServicesBase
 
 	}
 
+	public async Task UpdateRoomAvailability(
+		int roomId,
+		int roomAvailabilityId)
+	{
+
+		using PMContext pmContext = new(_connectionString);
+
+		if (!TryGetRoom(pmContext, roomId, out Room? room) || room is null) throw new ArgumentOutOfRangeException(nameof(roomId));
+		if (!TryGetRoomAvailability(pmContext, roomAvailabilityId, out RoomAvailability? roomAvailability) || roomAvailability is null) throw new ArgumentOutOfRangeException(nameof(roomAvailabilityId));
+
+		room.RoomAvailabilityId = roomAvailabilityId;
+		await pmContext.SaveChangesAsync();
+
+	}
+
 	private static Uri? GetFloorplanUrl(Room room)
 	{
 		if (room.FloorPlan is not null && room.FloorPlan.DigitalAssetUrl is not null)
@@ -180,6 +187,18 @@ public class RoomServices : ServicesBase
 		{
 			return new();
 		}
+	}
+
+	private static bool TryGetRoom(PMContext pmContext, int roomId, out Room? room)
+	{
+		room = pmContext.Rooms.FirstOrDefault(x => x.RoomId == roomId);
+		return room is not null;
+	}
+
+	private static bool TryGetRoomAvailability(PMContext pmContext, int roomAvailabilityId, out RoomAvailability? roomAvailability)
+	{
+		roomAvailability = pmContext.RoomAvailabilities.FirstOrDefault(x => x.RoomAvailabilityId == roomAvailabilityId);
+		return roomAvailability is not null;
 	}
 
 }
