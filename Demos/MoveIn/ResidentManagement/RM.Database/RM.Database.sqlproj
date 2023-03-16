@@ -65,13 +65,13 @@
     <Folder Include="Tables\PM" />
     <Folder Include="Tables\RM" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\Core" />
-    <Folder Include="Scripts\Core\Populate" />
-    <Folder Include="Scripts\PM" />
-    <Folder Include="Scripts\PM\CustomerData" />
-    <Folder Include="Scripts\RM" />
-    <Folder Include="Scripts\RM\Populate" />
     <Folder Include="Tables\RM\History" />
+    <Folder Include="Scripts\Populate" />
+    <Folder Include="Scripts\Populate\Core" />
+    <Folder Include="Scripts\Populate\RM" />
+    <Folder Include="Scripts\CustomerData" />
+    <Folder Include="Scripts\CustomerData\PM" />
+    <Folder Include="Scripts\CustomerData\RM" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\Core.sql" />
@@ -109,15 +109,16 @@
     <Build Include="Tables\RM\History\ResidentCommunityHistory.sql" />
     <Build Include="Tables\RM\ResidentCareLevel.sql" />
     <Build Include="Tables\RM\History\ResidentCareLevelHistory.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Prefix.sql" />
+    <None Include="Scripts\Populate\Core\Populate_RowStatus.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Suffix.sql" />
+    <None Include="Scripts\Populate\RM\Populate_Relation.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_Community.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityStatus.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_PayorType.sql" />
+    <None Include="Scripts\CustomerData\RM\CustomerData_Resident.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Core\Populate\Populate_Prefix.sql" />
-    <None Include="Scripts\Core\Populate\Populate_RowStatus.sql" />
-    <None Include="Scripts\Core\Populate\Populate_Suffix.sql" />
-    <None Include="Scripts\PM\CustomerData\CustomerData_Community.sql" />
-    <None Include="Scripts\PM\CustomerData\CustomerData_CommunityStatus.sql" />
-    <None Include="Scripts\PM\CustomerData\CustomerData_PayorType.sql" />
-    <None Include="Scripts\RM\Populate\Populate_Relation.sql" />
     <None Include="Beast.publish.xml" />
   </ItemGroup>
 </Project>
