@@ -1,7 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Text.Json.Serialization;
-
 string? connectionString = Environment.GetEnvironmentVariable("PM-ConnectionString");
 
 var host = new HostBuilder()

@@ -84,6 +84,7 @@
     <None Include="Scripts\Populate\Populate_Prefix.sql" />
     <None Include="Scripts\Populate\Populate_Suffix.sql" />
     <None Include="Beast.publish.xml" />
+    <None Include="Laptop.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

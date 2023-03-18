@@ -87,5 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Beast.publish.xml" />
+    <None Include="Laptop.publish.xml" />
   </ItemGroup>
 </Project>
