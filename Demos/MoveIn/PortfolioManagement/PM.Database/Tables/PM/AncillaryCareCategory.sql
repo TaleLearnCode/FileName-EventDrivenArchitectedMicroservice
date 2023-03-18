@@ -1,7 +1,7 @@
 ﻿CREATE TABLE PM.AncillaryCareCategory
 (
-  AncillaryCareCategoryId INT           NOT NULL IDENTITY(1,1),
-  ExternalId              NVARCHAR(100)     NULL,
+  AncillaryCareCategoryId   INT           NOT NULL IDENTITY(1,1),
+  ExternalId                NVARCHAR(100)     NULL,
   AncillaryCareCategoryName NVARCHAR(100) NOT NULL,
   AncillaryCareCategoryCode NVARCHAR(20)      NULL,
   ForegroundColor           CHAR(7)           NULL,

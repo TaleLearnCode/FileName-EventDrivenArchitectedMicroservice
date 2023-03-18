@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>CM.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{b7f56102-f119-43be-83f0-0a43d4de8b58}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>CM.Database</RootNamespace>
+    <AssemblyName>CM.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>CM</DefaultSchema>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Schemas" />
+    <Folder Include="Tables" />
+    <Folder Include="Tables\RM" />
+    <Folder Include="Tables\PM" />
+    <Folder Include="Tables\CM" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Populate" />
+    <Folder Include="Scripts\Populate\CM" />
+    <Folder Include="Scripts\Populate\PM" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Schemas\CM.sql" />
+    <Build Include="Schemas\RM.sql" />
+    <Build Include="Schemas\PM.sql" />
+    <Build Include="Tables\PM\AncillaryCare.sql" />
+    <Build Include="Tables\PM\AncillaryCareCategory.sql" />
+    <Build Include="Tables\PM\Community.sql" />
+    <Build Include="Tables\PM\CommunityStatus.sql" />
+    <Build Include="Tables\PM\Room.sql" />
+    <Build Include="Tables\RM\Resident.sql" />
+    <Build Include="Tables\RM\ResidentAncillaryCare.sql" />
+    <Build Include="Tables\RM\ResidentCommunity.sql" />
+    <Build Include="Tables\RM\ResidentRoom.sql" />
+    <Build Include="Tables\CM\Employee.sql" />
+    <Build Include="Tables\CM\EmployeeRole.sql" />
+    <Build Include="Tables\CM\CareTaskType.sql" />
+    <Build Include="Tables\CM\CareTask.sql" />
+    <Build Include="Tables\CM\CareTaskStatus.sql" />
+    <None Include="Scripts\Populate\CM\Populate_CareTaskStatus.sql" />
+    <None Include="Scripts\Populate\CM\Populate_EmployeeRole.sql" />
+    <Build Include="Tables\PM\CareType.sql" />
+    <Build Include="Tables\PM\RoomCareType.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Populate\CM\Populate_CareTaskType.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_AncillaryCare.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_AncillaryCareCategory.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_CareType.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_Community.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_CommunityStatus.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_Room.sql" />
+    <None Include="Scripts\Populate\PM\CustomerData_RoomCareType.sql" />
+    <None Include="Beast.publish.xml" />
+  </ItemGroup>
+</Project>

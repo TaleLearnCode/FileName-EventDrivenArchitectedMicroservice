@@ -30,3 +30,6 @@
 :r .\CustomerData\PM\CustomerData_Room.sql
 :r .\CustomerData\PM\CustomerData_RoomRate.sql
 :r .\CustomerData\PM\CustomerData_RoomCareType.sql
+:r .\CustomerData\PM\CustomerData_AncillaryCareCategory.sql
+:r .\CustomerData\PM\CustomerData_AncillaryCare.sql
+:r .\CustomerData\PM\CustomerData_CommunityAncillaryCare.sql

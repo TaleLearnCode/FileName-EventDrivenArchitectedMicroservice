@@ -5,7 +5,7 @@
 	CopyText            NVARCHAR(MAX) NOT NULL,
 	CONSTRAINT pkcContentCopy PRIMARY KEY CLUSTERED (ContentId, LanguageCultureCode),
 	CONSTRAINT fkContentCopy_Content         FOREIGN KEY (ContentId)           REFERENCES DCM.Content (ContentId),
-	CONSTRAINT fkContentCopy_LangaugeCulture FOREIGN KEY (LanguageCultureCode) REFERENCES Core.LanguageCulture (LanguageCultureCode)
+	CONSTRAINT fkContentCopy_LanguageCulture FOREIGN KEY (LanguageCultureCode) REFERENCES Core.LanguageCulture (LanguageCultureCode)
 )
 GO
 
@@ -17,9 +17,9 @@ EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @lev
 GO
 EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'CopyText',                      @value=N'The text of the content copy.',                                                                        @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'COLUMN';
 GO
-EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'pkcContentCopy',                @value=N'Defines the primary key for the ContentCopy table using the ContentId and LangaugeCultureId columns.', @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'CONSTRAINT';
+EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'pkcContentCopy',                @value=N'Defines the primary key for the ContentCopy table using the ContentId and LanguageCultureId columns.', @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'CONSTRAINT';
 GO
 EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'fkContentCopy_Content',         @value=N'Defines the relationship between the ContentCopy and Content tables using the ContentId column.',      @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'CONSTRAINT';
 GO
-EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'fkContentCopy_LangaugeCulture', @value=N'Defines the relationship between the ContentCopy and Content tables using the ContentId column.',      @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'CONSTRAINT';
+EXEC sp_addextendedproperty @level0name=N'DCM', @level1name=N'ContentCopy', @level2name=N'fkContentCopy_LanguageCulture', @value=N'Defines the relationship between the ContentCopy and Content tables using the ContentId column.',      @name=N'MS_Description', @level0type=N'SCHEMA', @level1type=N'TABLE', @level2type=N'CONSTRAINT';
 GO

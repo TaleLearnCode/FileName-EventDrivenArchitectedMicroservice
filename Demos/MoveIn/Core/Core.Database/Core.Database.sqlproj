@@ -81,9 +81,9 @@
     <None Include="Scripts\Populate\Populate_LanguageCulture.sql" />
     <None Include="Scripts\Populate\Populate_WorldRegion.sql" />
     <None Include="Scripts\Populate\Populate_RowStatus.sql" />
-    <None Include="Beast.publish.xml" />
     <None Include="Scripts\Populate\Populate_Prefix.sql" />
     <None Include="Scripts\Populate\Populate_Suffix.sql" />
+    <None Include="Beast.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

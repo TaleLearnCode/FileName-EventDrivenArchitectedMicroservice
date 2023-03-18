@@ -1,0 +1,72 @@
+﻿SET IDENTITY_INSERT PM.AncillaryCare ON
+GO
+
+MERGE PM.AncillaryCare AS TARGET
+USING (VALUES ( 1, 'Med Level 1',                     1,  10),
+              ( 2, 'Med Level 2',                     1,  20),
+              ( 3, 'Med Level 3',                     1,  30),
+              ( 4, 'Med Level 4',                     1,  40),
+              ( 5, 'Incontinence Level 1',            2,  20),
+              ( 6, 'Incontinence Level 2',            2,  30),
+              ( 7, 'Incontinence Level 0 ',           2,  10),
+              ( 8, 'Med Level 0',                     1,  5),
+              ( 9, 'Med Level 1A',                    1,  10),
+              (10, 'Med Level 1B',                    1,  10),
+              (11, 'Compan Care -  None  ',           6,   0),
+              (12, 'Compan Care - Hourly  ',          6,   0),
+              (19, 'Private Duty - None',             5,   0),
+              (20, 'Private Duty - Hourly',           5,   0),
+              (28, 'Enhanced Support Level 0',        7,  10),
+              (29, 'Enhanced Support Level 1',        7,  20),
+              (30, 'Enhanced Support Level 3',        7,  40),
+              (31, 'Enhanced Support Level 2',        7,  40),
+              (32, 'Medication Management',           1,   0),
+              (33, 'Diabetic Management Level 1',     8,  20),
+              (34, 'Med LMA Level 1',                 1,  20),
+              (35, 'Med LMA Level 2',                 1,  30),
+              (36, 'Med LMA Level 3',                 1,  40),
+              (37, 'Med LMA Level 0',                 1,  10),
+              (38, 'Diabetic Management Level 0',     8,  10),
+              (39, 'Enhanced Med Level 1',            1, 510),
+              (40, 'Enhanced Med Level 2',            1, 520),
+              (41, 'Discreet Supplies Level 0',       9,  10),
+              (42, 'Discreet Supplies Level 1',       9,  20),
+              (43, 'Discreet Supplies Level 2',       9,  30),
+              (44, 'Discreet Supplies Level 3',       9,  40),
+              (45, 'Discreet Supplies Level 4',       9,  50),
+              (46, 'Mechanical Lift Level 0',        10,  10),
+              (47, 'Mechanical Lift',                10,  20),
+              (48, 'Enhanced Support Level 4',        7,  50),
+              (49, 'Enhanced Support Level 5',        7,  60),
+              (50, 'Med Level 5',                     1,  50),
+              (51, 'Diabetic Management Level 2',     8,  25),
+              (52, 'Nursing Services Level 0 ',      11,  10),
+              (53, 'Nursing Services Level 1',       11,  20),
+              (54, 'Nursing Services Level 2',       11,  40),
+              (55, 'Non-Approved Packaging Level 0', 12,  10),
+              (56, 'Non-Approved Packaging Level 1', 12,  20),
+              (57, 'SAMM Level 0',                   13,   5),
+              (58, 'SAMM Level 1',                   13,  10),
+              (59, 'SAMM Level 2',                   13,  20),
+              (60, 'SAMM Level 3',                   13,  30),
+              (61, 'Continence Supplies',            14,  10),
+              (62, 'Continence Supplies Level 2',    14,  20))
+AS SOURCE (AncillaryCareId,
+           AncillaryCareName,
+           AncillaryCareCategoryId,
+           SortOrder)
+ON TARGET.AncillaryCareId = SOURCE.AncillaryCareId
+WHEN MATCHED THEN UPDATE SET TARGET.AncillaryCareName       = SOURCE.AncillaryCareName,
+                             TARGET.AncillaryCareCategoryId = SOURCE.AncillaryCareCategoryId,
+                             TARGET.SortOrder               = SOURCE.SortOrder
+WHEN NOT MATCHED THEN INSERT (AncillaryCareId,
+                              AncillaryCareName,
+                              AncillaryCareCategoryId,
+                              SortOrder)
+                      VALUES (SOURCE.AncillaryCareId,
+                              SOURCE.AncillaryCareName,
+                              SOURCE.AncillaryCareCategoryId,
+                              SOURCE.SortOrder);
+
+SET IDENTITY_INSERT PM.AncillaryCare OFF
+GO

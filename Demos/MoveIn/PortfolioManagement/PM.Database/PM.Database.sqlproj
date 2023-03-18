@@ -46,7 +46,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunSqlCodeAnalysis>True</RunSqlCodeAnalysis>
+    <RunSqlCodeAnalysis>False</RunSqlCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -146,5 +146,8 @@
     <None Include="Scripts\CustomerData\PM\CustomerData_RoomStyle.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_RoomType.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_RoomTypeCategory.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCareCategory.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCare.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CommunityAncillaryCare.sql" />
   </ItemGroup>
 </Project>

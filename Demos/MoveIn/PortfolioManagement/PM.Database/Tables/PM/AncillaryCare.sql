@@ -1,7 +1,7 @@
 ﻿CREATE TABLE PM.AncillaryCare
 (
   AncillaryCareId         INT           NOT NULL IDENTITY(1,1),
-  ExternalId              NVARCHAR(100) NOT NULL,
+  ExternalId              NVARCHAR(100)     NULL,
   AncillaryCareCategoryId INT           NOT NULL,
   AncillaryCareName       NVARCHAR(100) NOT NULL,
   ForegroundColor         CHAR(7)           NULL,
@@ -14,5 +14,5 @@
 )
 GO
 
-  CREATE UNIQUE NONCLUSTERED INDEX unqAncillaryCare_ExternalId ON PM.AncillaryCare (ExternalId) WHERE ExternalId IS NOT NULL
-  GO
+CREATE UNIQUE NONCLUSTERED INDEX unqAncillaryCare_ExternalId ON PM.AncillaryCare (ExternalId) WHERE ExternalId IS NOT NULL
+GO
