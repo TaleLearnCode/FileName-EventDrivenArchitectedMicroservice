@@ -4554,7 +4554,7 @@ USING (VALUES (    1, 'Brenda', 'R', 'Daigre', '1932-6-27'),
               (30896, 'Heather', 'E', 'Ramsey', '1933-12-23'),
               (32365, 'Jorge', 'D', 'Caldwell', '1931-8-15'),
               (34745, 'Luz', 'D', 'Kline', '1953-7-9'))
-AS SOURCE (ResidentId, FirstName, MiddleName, LastName, DataOfBirth)
+AS SOURCE (ResidentId, FirstName, MiddleName, LastName, DateOfBirth)
 ON TARGET.ResidentId = SOURCE.ResidentId
 WHEN MATCHED THEN UPDATE SET TARGET.FirstName   = SOURCE.LastName,
                              TARGET.MiddleName  = SOURCE.MiddleName,
@@ -4565,11 +4565,11 @@ WHEN NOT MATCHED THEN INSERT (ResidentId,
                               MiddleName,
                               LastName,
                               DateOfBirth)
-                      VALUES (TARGET.ResidentId,
-                              TARGET.FirstName,
-                              TARGET.MiddleName,
-                              TARGET.LastName,
-                              TARGET.DateOfBirth);
+                      VALUES (SOURCE.ResidentId,
+                              SOURCE.FirstName,
+                              SOURCE.MiddleName,
+                              SOURCE.LastName,
+                              SOURCE.DateOfBirth);
 GO
 
 SET IDENTITY_INSERT RM.Resident OFF

@@ -120,5 +120,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Beast.publish.xml" />
+    <None Include="Laptop.publish.xml" />
+    <None Include="Scripts\Populate\Core\Populate_Country.sql" />
+    <None Include="Scripts\Populate\Core\Populate_CountryDivision.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_CareType.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_Room.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCareCategory.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCare.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>
