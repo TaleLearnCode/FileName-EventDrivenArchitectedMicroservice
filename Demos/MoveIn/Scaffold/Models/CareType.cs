@@ -10,11 +10,7 @@ namespace Scaffold.Models
     {
         public CareType()
         {
-            CareLevels = new HashSet<CareLevel>();
-            CommunityCareTypes = new HashSet<CommunityCareType>();
-            CommunityRoomTypes = new HashSet<CommunityRoomType>();
             RoomCareTypes = new HashSet<RoomCareType>();
-            Rooms = new HashSet<Room>();
         }
 
         /// <summary>
@@ -51,10 +47,6 @@ namespace Scaffold.Models
         /// </summary>
         public int RowStatusId { get; set; }
 
-        public virtual ICollection<CareLevel> CareLevels { get; set; }
-        public virtual ICollection<CommunityCareType> CommunityCareTypes { get; set; }
-        public virtual ICollection<CommunityRoomType> CommunityRoomTypes { get; set; }
         public virtual ICollection<RoomCareType> RoomCareTypes { get; set; }
-        public virtual ICollection<Room> Rooms { get; set; }
     }
 }

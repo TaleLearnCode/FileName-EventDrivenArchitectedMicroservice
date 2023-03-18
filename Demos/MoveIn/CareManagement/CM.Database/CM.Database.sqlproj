@@ -67,6 +67,8 @@
     <Folder Include="Scripts\Populate" />
     <Folder Include="Scripts\Populate\CM" />
     <Folder Include="Scripts\Populate\PM" />
+    <Folder Include="Tables\Core" />
+    <Folder Include="Scripts\Populate\Core" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\CM.sql" />
@@ -90,6 +92,8 @@
     <None Include="Scripts\Populate\CM\Populate_EmployeeRole.sql" />
     <Build Include="Tables\PM\CareType.sql" />
     <Build Include="Tables\PM\RoomCareType.sql" />
+    <Build Include="Schemas\Core.sql" />
+    <Build Include="Tables\Core\RowStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
@@ -104,5 +108,7 @@
     <None Include="Scripts\Populate\PM\CustomerData_Room.sql" />
     <None Include="Scripts\Populate\PM\CustomerData_RoomCareType.sql" />
     <None Include="Beast.publish.xml" />
+    <None Include="Scripts\Populate\Core\Populate_RowStatus.sql" />
+    <None Include="Laptop.publish.xml" />
   </ItemGroup>
 </Project>

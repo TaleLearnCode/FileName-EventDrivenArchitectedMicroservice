@@ -1,7 +1,4 @@
-﻿SET IDENTITY_INSERT PM.Community ON
-GO
-
-MERGE PM.Community AS TARGET
+﻿MERGE PM.Community AS TARGET
 USING (VALUES ( 1, '30100', 'Moon Over Nowhere', 'Northstar Moon Over Nowhere', 'en-US', 'sq ft', NULL, 'US', '-54.567', '49.2969', NULL, 2, 0, 1),
               ( 2, '30101', 'Homeowners Realty', 'Northstar Homeowners Realty', 'en-US', 'sq ft', NULL, 'US', '-20.3845', '43.9132', NULL, 2, 0, 1),
               ( 3, '30102', 'La Casa Grande', 'Northstar La Casa Grande', 'en-US', 'sq ft', NULL, 'US', '63.0826', '-130.8007', NULL, 2, 0, 1),
@@ -69,46 +66,16 @@ AS SOURCE (CommunityId,
 ON TARGET.CommunityId = SOURCE.CommunityId
 WHEN MATCHED THEN UPDATE SET TARGET.CommunityNumber     = SOURCE.CommunityNumber,
                              TARGET.CommunityName       = SOURCE.CommunityName,
-                             TARGET.ExternalName        = SOURCE.ExternalName,
-                             TARGET.LanguageCultureCode = SOURCE.LanguageCultureCode,
-                             TARGET.RoomMeasurement     = SOURCE.RoomMeasurement,
-                             TARGET.OverviewId          = SOURCE.OverviewId,
-                             TARGET.CountryCode         = SOURCE.CountryCode,
-                             TARGET.Longitude           = SOURCE.Longitude,
-                             TARGET.Latitude            = SOURCE.Latitude,
-                             TARGET.ProfileImageId      = SOURCE.ProfileImageId,
                              TARGET.CommunityStatusId   = SOURCE.CommunityStatusId,
-                             TARGET.IsFeatured          = SOURCE.IsFeatured,
                              TARGET.RowStatusId         = SOURCE.RowStatusId
 WHEN NOT MATCHED THEN INSERT (CommunityId,
                               CommunityNumber,
                               CommunityName,
-                              ExternalName,
-                              LanguageCultureCode,
-                              RoomMeasurement,
-                              OverviewId,
-                              CountryCode,
-                              Longitude,
-                              Latitude,
-                              ProfileImageId,
                               CommunityStatusId,
-                              IsFeatured,
                               RowStatusId)
                       VALUES (SOURCE.CommunityId,
                               SOURCE.CommunityNumber,
                               SOURCE.CommunityName,
-                              SOURCE.ExternalName,
-                              SOURCE.LanguageCultureCode,
-                              SOURCE.RoomMeasurement,
-                              SOURCE.OverviewId,
-                              SOURCE.CountryCode,
-                              SOURCE.Longitude,
-                              SOURCE.Latitude,
-                              SOURCE.ProfileImageId,
                               SOURCE.CommunityStatusId,
-                              SOURCE.IsFeatured,
                               SOURCE.RowStatusId);
-GO
-
-SET IDENTITY_INSERT PM.Community OFF
 GO

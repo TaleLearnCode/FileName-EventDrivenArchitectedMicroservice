@@ -1,7 +1,4 @@
-﻿SET IDENTITY_INSERT PM.Room ON
-GO
-
-MERGE PM.Room AS TARGET
+﻿MERGE PM.Room AS TARGET
 USING (VALUES               (1, 10, '42', 5664, '208', 'One Bedroom', 0, 1, 39, NULL, 270, NULL, NULL, NULL, 1),
               (2, 18, '667', 5671, '915', 'Two Bedroom Cottage', 0, 2, 24, NULL, 1120, NULL, 2, NULL, 1),
               (3, 18, '668', 5671, '916', 'Two Bedroom Cottage', 0, 1, 24, NULL, 1107, NULL, 2, NULL, 1),
@@ -5561,50 +5558,11 @@ AS SOURCE (RoomId,
            RowStatusId)
 ON TARGET.RoomId = SOURCE.RoomId
 WHEN MATCHED THEN UPDATE SET TARGET.CommunityId          = SOURCE.CommunityId,
-                             TARGET.ExternalId           = SOURCE.ExternalId,
-                             TARGET.CommunityStructureId = SOURCE.CommunityStructureId,
-                             TARGET.RoomNumber           = SOURCE.RoomNumber,
-                             TARGET.RoomName             = SOURCE.RoomName,
-                             TARGET.IsFeatured           = SOURCE.IsFeatured,
-                             TARGET.RoomAvailabilityId   = SOURCE.RoomAvailabilityId,
-                             TARGET.RoomTypeId           = SOURCE.RoomTypeId,
-                             TARGET.ContentId            = SOURCE.ContentId,
-                             TARGET.RoomArea             = SOURCE.RoomArea,
-                             TARGET.FloorPlanId          = SOURCE.FloorPlanId,
-                             TARGET.AssignedCareTypeId   = SOURCE.AssignedCareTypeId,
-                             TARGET.SortOrder            = SOURCE.SortOrder,
-                             TARGET.RowStatusId          = SOURCE.RowStatusId
+                             TARGET.RoomNumber           = SOURCE.RoomNumber
 WHEN NOT MATCHED THEN INSERT (RoomId,
                               CommunityId,
-                              ExternalId,
-                              CommunityStructureId,
-                              RoomNumber,
-                              RoomName,
-                              IsFeatured,
-                              RoomAvailabilityId,
-                              RoomTypeId,
-                              ContentId,
-                              RoomArea,
-                              FloorPlanId,
-                              AssignedCareTypeId,
-                              SortOrder,
-                              RowStatusId)
+                              RoomNumber)
                       VALUES (SOURCE.RoomId,
                               SOURCE.CommunityId,
-                              SOURCE.ExternalId,
-                              SOURCE.CommunityStructureId,
-                              SOURCE.RoomNumber,
-                              SOURCE.RoomName,
-                              SOURCE.IsFeatured,
-                              SOURCE.RoomAvailabilityId,
-                              SOURCE.RoomTypeId,
-                              SOURCE.ContentId,
-                              SOURCE.RoomArea,
-                              SOURCE.FloorPlanId,
-                              SOURCE.AssignedCareTypeId,
-                              SOURCE.SortOrder,
-                              SOURCE.RowStatusId);
-GO
-
-SET IDENTITY_INSERT PM.Room OFF
+                              SOURCE.RoomNumber);
 GO

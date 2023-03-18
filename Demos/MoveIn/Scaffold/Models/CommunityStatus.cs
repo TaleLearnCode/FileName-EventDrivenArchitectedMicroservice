@@ -18,10 +18,6 @@ namespace Scaffold.Models
         /// </summary>
         public int CommunityStatusId { get; set; }
         /// <summary>
-        /// The tenant&apos;s identifier for the community status record.
-        /// </summary>
-        public string? ExternalId { get; set; }
-        /// <summary>
         /// The name of the community status.
         /// </summary>
         public string CommunityStatusName { get; set; } = null!;
