@@ -101,7 +101,7 @@ public class CareServices : ServicesBase, ICareServices
 			resident.FirstName = residentMoveInRequest.FirstName;
 			resident.MiddleName = residentMoveInRequest.MiddleName;
 			resident.LastName = residentMoveInRequest.LastName;
-			resident.DateOfBirth = residentMoveInRequest.DateOfBirth.ToDateTime(new TimeOnly());
+			resident.DateOfBirth = residentMoveInRequest.DateOfBirth;
 		}
 		else
 		{
@@ -110,7 +110,7 @@ public class CareServices : ServicesBase, ICareServices
 				FirstName = residentMoveInRequest.FirstName,
 				MiddleName = residentMoveInRequest.MiddleName,
 				LastName = residentMoveInRequest.LastName,
-				DateOfBirth = residentMoveInRequest.DateOfBirth.ToDateTime(new TimeOnly())
+				DateOfBirth = residentMoveInRequest.DateOfBirth
 			};
 			await cmContext.Residents.AddAsync(resident);
 		}

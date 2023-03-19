@@ -47,7 +47,6 @@ public class GetCommunityResident
 			_logger.LogError("Unexpected exception: {ExceptionMessage}", ex.Message);
 			return request.CreateErrorResponse(ex);
 		}
-
 	}
 
 }
