@@ -23,6 +23,7 @@ public class CMContext : DbContext
 		CreateModel.AncillaryCare(modelBuilder);
 		CreateModel.AncillaryCareCategory(modelBuilder);
 		CreateModel.CareTask(modelBuilder);
+		CreateModel.CareTaskResident(modelBuilder);
 		CreateModel.CareTaskStatus(modelBuilder);
 		CreateModel.CareTaskType(modelBuilder);
 		CreateModel.CareType(modelBuilder);
@@ -42,6 +43,7 @@ public class CMContext : DbContext
 	public virtual DbSet<AncillaryCare> AncillaryCares { get; set; } = null!;
 	public virtual DbSet<AncillaryCareCategory> AncillaryCareCategories { get; set; } = null!;
 	public virtual DbSet<CareTask> CareTasks { get; set; } = null!;
+	public virtual DbSet<CareTaskResident> CareTaskResidents { get; set; } = null!;
 	public virtual DbSet<CareTaskStatus> CareTaskStatuses { get; set; } = null!;
 	public virtual DbSet<CareTaskType> CareTaskTypes { get; set; } = null!;
 	public virtual DbSet<CareType> CareTypes { get; set; } = null!;

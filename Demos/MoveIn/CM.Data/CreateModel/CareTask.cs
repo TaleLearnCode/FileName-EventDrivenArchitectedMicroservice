@@ -7,11 +7,24 @@ internal static partial class CreateModel
 	{
 		modelBuilder.Entity<CareTask>(entity =>
 		{
-			entity.HasNoKey();
-
 			entity.ToTable("CareTask", "CM");
 
-			entity.Property(e => e.CareTaskId).ValueGeneratedOnAdd();
+			entity.HasOne(d => d.CareTaskStatus)
+					.WithMany(p => p.CareTasks)
+					.HasForeignKey(d => d.CareTaskStatusId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("fkCareTask_CareTaskStatus");
+
+			entity.HasOne(d => d.CareTaskType)
+					.WithMany(p => p.CareTasks)
+					.HasForeignKey(d => d.CareTaskTypeId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("fkCareTask_CareTaskType");
+
+			entity.HasOne(d => d.PrimaryEmployee)
+					.WithMany(p => p.CareTasks)
+					.HasForeignKey(d => d.PrimaryEmployeeId)
+					.HasConstraintName("fkCareTask_PrimaryEmployee");
 		});
 	}
 

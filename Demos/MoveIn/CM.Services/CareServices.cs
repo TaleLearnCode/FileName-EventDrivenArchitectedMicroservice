@@ -34,6 +34,49 @@ public class CareServices : ServicesBase, ICareServices
 		return await BuildResidentResponseAsync(cmContext, communityId, residentId);
 	}
 
+	public async Task<ResidentCareTasks?> GetCareTasksForResident(int communityId, int residentId)
+	{
+		using CMContext cmContext = new(_connectionString);
+		List<ResidentCommunity> residentCommunities = await cmContext.ResidentCommunities
+			.Include(x => x.Resident)
+				.ThenInclude(x => x.CareTaskResidents)
+					.ThenInclude(x => x.CareTask)
+						.ThenInclude(x => x.CareTaskType)
+			.Include(x => x.Resident)
+				.ThenInclude(x => x.CareTaskResidents)
+					.ThenInclude(x => x.CareTask)
+						.ThenInclude(x => x.CareTaskStatus)
+			.Where(x => x.CommunityId == communityId && x.ResidentId == residentId)
+			.ToListAsync();
+		ResidentCareTasks? response = default;
+		if (residentCommunities is not null && residentCommunities.Any())
+		{
+			Resident resident = residentCommunities.First().Resident;
+			response = new()
+			{
+				ResidentId = resident.ResidentId,
+				FirstName = resident.FirstName,
+				LastName = resident.LastName
+			};
+			foreach (CareTask? careTask in residentCommunities.First().Resident.CareTaskResidents.Select(x => x.CareTask))
+			{
+				if (careTask is not null)
+				{
+					response.ActiveCareTasks.Add(new()
+					{
+						CareTaskId = careTask.CareTaskId,
+						TaskType = careTask.CareTaskType.CareTaskTypeName,
+						Status = careTask.CareTaskStatus.CareTaskStatusName,
+						AssignedDateTime = careTask.AssignedDateTime
+					});
+				}
+			}
+			response.ActiveCount = response.ActiveCareTasks.Count;
+		}
+
+		return response;
+	}
+
 	private static async Task AssignResidentAncillaryCares(ResidentMoveInRequest residentMoveInRequest, CMContext cmContext, ResidentCommunity residentCommunity)
 	{
 		if (residentMoveInRequest.AncillaryCares is not null && residentMoveInRequest.AncillaryCares.Any())

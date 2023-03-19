@@ -7,6 +7,7 @@ namespace Scaffold.Models
     {
         public Resident()
         {
+            CareTaskResidents = new HashSet<CareTaskResident>();
             ResidentCommunities = new HashSet<ResidentCommunity>();
         }
 
@@ -16,6 +17,7 @@ namespace Scaffold.Models
         public string LastName { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
 
+        public virtual ICollection<CareTaskResident> CareTaskResidents { get; set; }
         public virtual ICollection<ResidentCommunity> ResidentCommunities { get; set; }
     }
 }

@@ -94,6 +94,7 @@
     <Build Include="Tables\PM\RoomCareType.sql" />
     <Build Include="Schemas\Core.sql" />
     <Build Include="Tables\Core\RowStatus.sql" />
+    <Build Include="Tables\CM\CareTaskResident.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

@@ -20,6 +20,7 @@ namespace Scaffold.Data
         public virtual DbSet<AncillaryCare> AncillaryCares { get; set; } = null!;
         public virtual DbSet<AncillaryCareCategory> AncillaryCareCategories { get; set; } = null!;
         public virtual DbSet<CareTask> CareTasks { get; set; } = null!;
+        public virtual DbSet<CareTaskResident> CareTaskResidents { get; set; } = null!;
         public virtual DbSet<CareTaskStatus> CareTaskStatuses { get; set; } = null!;
         public virtual DbSet<CareTaskType> CareTaskTypes { get; set; } = null!;
         public virtual DbSet<CareType> CareTypes { get; set; } = null!;
@@ -90,11 +91,41 @@ namespace Scaffold.Data
 
             modelBuilder.Entity<CareTask>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("CareTask", "CM");
 
-                entity.Property(e => e.CareTaskId).ValueGeneratedOnAdd();
+                entity.HasOne(d => d.CareTaskStatus)
+                    .WithMany(p => p.CareTasks)
+                    .HasForeignKey(d => d.CareTaskStatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkCareTask_CareTaskStatus");
+
+                entity.HasOne(d => d.CareTaskType)
+                    .WithMany(p => p.CareTasks)
+                    .HasForeignKey(d => d.CareTaskTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkCareTask_CareTaskType");
+
+                entity.HasOne(d => d.PrimaryEmployee)
+                    .WithMany(p => p.CareTasks)
+                    .HasForeignKey(d => d.PrimaryEmployeeId)
+                    .HasConstraintName("fkCareTask_PrimaryEmployee");
+            });
+
+            modelBuilder.Entity<CareTaskResident>(entity =>
+            {
+                entity.ToTable("CareTaskResident", "CM");
+
+                entity.HasOne(d => d.CareTask)
+                    .WithMany(p => p.CareTaskResidents)
+                    .HasForeignKey(d => d.CareTaskId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkCareTaskResident_CareTask");
+
+                entity.HasOne(d => d.Resident)
+                    .WithMany(p => p.CareTaskResidents)
+                    .HasForeignKey(d => d.ResidentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkCareTaskResident_ResidentId");
             });
 
             modelBuilder.Entity<CareTaskStatus>(entity =>
