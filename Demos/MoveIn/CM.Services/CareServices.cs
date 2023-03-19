@@ -1,8 +1,10 @@
 ﻿using CM.Services.Requests;
+using CM.Services.Responses;
 using Microsoft.EntityFrameworkCore;
 using SLS.CM.Data;
 using SLS.CM.Domain;
 using SLS.Common.Services;
+using SLS.Common.Services.Extensions;
 
 namespace CM.Services;
 
@@ -11,7 +13,7 @@ public class CareServices : ServicesBase, ICareServices
 
 	public CareServices(string connectionString) : base(connectionString) { }
 
-	public async Task ResidentMoveIn(ResidentMoveInRequest residentMoveInRequest)
+	public async Task<ResidentResponse?> ResidentMoveIn(ResidentMoveInRequest residentMoveInRequest)
 	{
 		using CMContext cmContext = new(_connectionString);
 		Resident? resident = await UpsertResident(cmContext, residentMoveInRequest);
@@ -21,7 +23,15 @@ public class CareServices : ServicesBase, ICareServices
 			ResidentCommunity residentCommunity = resident.ResidentCommunities.First(x => x.CommunityId == residentMoveInRequest.CommunityId);
 			await AssignResidentToRoomAsync(cmContext, residentCommunity, residentMoveInRequest);
 			await AssignResidentAncillaryCares(residentMoveInRequest, cmContext, residentCommunity);
+			return await BuildResidentResponseAsync(cmContext, residentMoveInRequest.CommunityId, resident.ResidentId);
 		}
+		return default;
+	}
+
+	public async Task<ResidentResponse?> GetCommunityResident(int communityId, int residentId)
+	{
+		using CMContext cmContext = new(_connectionString);
+		return await BuildResidentResponseAsync(cmContext, communityId, residentId);
 	}
 
 	private static async Task AssignResidentAncillaryCares(ResidentMoveInRequest residentMoveInRequest, CMContext cmContext, ResidentCommunity residentCommunity)
@@ -116,5 +126,87 @@ public class CareServices : ServicesBase, ICareServices
 
 	private static bool IsResidentAssignedAncillaryCare(ICollection<ResidentAncillaryCare>? residentAncillaryCares, int ancillaryCareId)
 		=> residentAncillaryCares is not null && residentAncillaryCares.FirstOrDefault(x => x.AncillaryCareId == ancillaryCareId) is not null;
+
+	private static async Task<ResidentResponse?> BuildResidentResponseAsync(CMContext cmContext, int communityId, int residentId)
+	{
+		Resident? resident = await cmContext.Residents
+			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
+				.ThenInclude(x => x.ResidentRooms)
+					.ThenInclude(x => x.Room)
+			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
+				.ThenInclude(x => x.ResidentRooms)
+					.ThenInclude(x => x.CareType)
+			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
+				.ThenInclude(x => x.ResidentAncillaryCares)
+					.ThenInclude(x => x.AncillaryCare)
+			.FirstOrDefaultAsync(x => x.ResidentId == residentId);
+
+
+		if (resident is not null)
+		{
+			ResidentResponse response = new()
+			{
+				ResidentId = resident.ResidentId,
+				FirstName = resident.FirstName,
+				MiddleName = resident.MiddleName,
+				LastName = resident.LastName,
+				DateOfBirth = DateOnly.FromDateTime(resident.DateOfBirth)
+			};
+			if (resident.ResidentCommunities is not null && resident.ResidentCommunities.Any())
+			{
+				response.Communities = new();
+				foreach (ResidentCommunity residentCommunity in resident.ResidentCommunities)
+				{
+					ResidentCommunityResponse residentCommunityResponse = new()
+					{
+						ResidentCommunityId = residentCommunity.ResidentCommunityId,
+						CommunityNumber = residentCommunity.Community?.CommunityNumber,
+						CommunityName = residentCommunity.Community?.CommunityName,
+						ProfileImageUrl = residentCommunity.Community?.ProfileImageUrl.ToUri()
+					};
+					if (residentCommunity.ResidentRooms is not null && residentCommunity.ResidentRooms.Any())
+					{
+						residentCommunityResponse.Rooms = new();
+						foreach (ResidentRoom residentRoom in residentCommunity.ResidentRooms)
+						{
+							ResidentRoomResponse residentRoomResponse = new()
+							{
+								ResidentRoomId = residentRoom.ResidentRoomId,
+								RoomNumber = residentRoom.Room?.RoomNumber
+							};
+							if (residentRoom.CareType is not null)
+								residentRoomResponse.CareType = new()
+								{
+									Id = residentRoom.CareType.CareTypeId,
+									Name = residentRoom.CareType.CareTypeName,
+									Code = residentRoom.CareType.CareTypeCode,
+									BackgroundColor = residentRoom.CareType.BackgroundColor,
+									ForegroundColor = residentRoom.CareType.ForegroundColor
+								};
+							residentCommunityResponse.Rooms.Add(residentRoomResponse);
+						}
+					}
+					if (residentCommunity.ResidentAncillaryCares is not null && residentCommunity.ResidentAncillaryCares.Any())
+					{
+						residentCommunityResponse.AncillaryCares = new();
+						foreach (ResidentAncillaryCare residentAncillaryCare in residentCommunity.ResidentAncillaryCares)
+						{
+							residentCommunityResponse.AncillaryCares.Add(new()
+							{
+								Id = residentAncillaryCare.AncillaryCareId,
+								Name = residentAncillaryCare.AncillaryCare?.AncillaryCareName,
+								BackgroundColor = residentAncillaryCare.AncillaryCare?.BackgroundColor,
+								ForegroundColor = residentAncillaryCare.AncillaryCare?.ForegroundColor
+							});
+						}
+					}
+					response.Communities.Add(residentCommunityResponse);
+				}
+			}
+			return response;
+		}
+		else
+			return default;
+	}
 
 }
