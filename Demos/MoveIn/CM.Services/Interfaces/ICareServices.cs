@@ -8,4 +8,5 @@ public interface ICareServices
 	Task<ResidentResponse?> ResidentMoveIn(ResidentMoveInRequest residentMoveInRequest);
 	Task<ResidentResponse?> GetCommunityResident(int communityId, int residentId);
 	Task<ResidentCareTasks?> GetCareTasksForResident(int communityId, int residentId);
+	Task<ResidentCareTasks?> AssignCareTaskToNewResidentAsync(int communityId, int residentId);
 }

@@ -1,20 +1,19 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using SLS.CM.Services.Requests;
 using SLS.CM.Services.Responses;
 using TaleLearnCode;
 
 namespace SLS.CM.Functions.Functions;
 
-public class ResidentMoveIn
+public class AssignCareTaskToNewResident
 {
 
 	private readonly ILogger _logger;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly ICareServices _careServices;
 
-	public ResidentMoveIn(
+	public AssignCareTaskToNewResident(
 		ILoggerFactory loggerFactory,
 		JsonSerializerOptions jsonSerializerOptions,
 		ICareServices careServices)
@@ -24,16 +23,17 @@ public class ResidentMoveIn
 		_careServices = careServices;
 	}
 
-	[Function("ResidentMoveIn")]
+	[Function("AssignCareTaskToNewResident")]
 	public async Task<HttpResponseData> RunAsync(
-		[HttpTrigger(AuthorizationLevel.Function, "post", Route = "communities/{communityId}/residents/")] HttpRequestData request,
-		int communityId)
+		[HttpTrigger(AuthorizationLevel.Function, "post", Route = "communities/{communityId}/residents/{residentId}/tasks")] HttpRequestData request,
+		int communityId,
+		int residentId)
 	{
 		try
 		{
 			ArgumentNullException.ThrowIfNull(communityId);
-			ResidentMoveInRequest residentMoveInRequest = await request.GetRequestParametersAsync<ResidentMoveInRequest>(_jsonSerializerOptions);
-			ResidentResponse? response = await _careServices.ResidentMoveIn(residentMoveInRequest);
+			ArgumentNullException.ThrowIfNull(residentId);
+			ResidentCareTasks? response = await _careServices.AssignCareTaskToNewResidentAsync(communityId, residentId);
 			return await request.CreateResponseAsync(response, _jsonSerializerOptions);
 		}
 		catch (Exception ex) when (ex is ArgumentNullException)

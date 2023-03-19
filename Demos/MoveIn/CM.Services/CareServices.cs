@@ -37,17 +37,59 @@ public class CareServices : ServicesBase, ICareServices
 	public async Task<ResidentCareTasks?> GetCareTasksForResident(int communityId, int residentId)
 	{
 		using CMContext cmContext = new(_connectionString);
+		return await GetCareTasksForResdientAsync(communityId, residentId, cmContext);
+	}
+
+	public async Task<ResidentCareTasks?> AssignCareTaskToNewResidentAsync(int communityId, int residentId)
+	{
+		ArgumentNullException.ThrowIfNull(communityId);
+		ArgumentNullException.ThrowIfNull(residentId);
+		using CMContext cmContext = new(_connectionString);
+
+		ResidentCommunity? residentCommunity = await cmContext.ResidentCommunities
+			.Include(x => x.Resident)
+				.ThenInclude(x => x.CareTaskResidents)
+					.ThenInclude(x => x.CareTask)
+			.FirstOrDefaultAsync(x => x.CommunityId == communityId && x.ResidentId == residentId)
+			?? throw new ArgumentOutOfRangeException(string.Empty, "Unable to locate the specified resident at the specified community.");
+
+		List<CareTaskType> careTaskTypes = await cmContext.CareTaskTypes.Where(x => x.AssignToNewResidents).ToListAsync();
+		if (careTaskTypes.Any())
+		{
+			Resident resident = residentCommunity.Resident;
+			DateTime expectedStart = new(DateTime.UtcNow.AddDays(2).Year, DateTime.UtcNow.AddDays(2).Month, DateTime.UtcNow.AddDays(2).Day, 12, 0, 0);
+			DateTime expectedFinish = new(DateTime.UtcNow.AddDays(5).Year, DateTime.UtcNow.AddDays(5).Month, DateTime.UtcNow.AddDays(5).Day, 21, 0, 0);
+			foreach (CareTaskType careTaskType in careTaskTypes)
+			{
+				resident.CareTaskResidents.Add(new()
+				{
+					CareTask = new()
+					{
+						CareTaskTypeId = careTaskType.CareTaskTypeId,
+						CareTaskStatusId = 1,
+						ExpectedStartDateTime = expectedStart,
+						ExpectetdEndDateTime = expectedFinish
+					}
+				});
+			}
+			await cmContext.SaveChangesAsync();
+		}
+		return await GetCareTasksForResdientAsync(communityId, residentId, cmContext);
+	}
+
+	private static async Task<ResidentCareTasks?> GetCareTasksForResdientAsync(int communityId, int residentId, CMContext cmContext)
+	{
 		List<ResidentCommunity> residentCommunities = await cmContext.ResidentCommunities
-			.Include(x => x.Resident)
-				.ThenInclude(x => x.CareTaskResidents)
-					.ThenInclude(x => x.CareTask)
-						.ThenInclude(x => x.CareTaskType)
-			.Include(x => x.Resident)
-				.ThenInclude(x => x.CareTaskResidents)
-					.ThenInclude(x => x.CareTask)
-						.ThenInclude(x => x.CareTaskStatus)
-			.Where(x => x.CommunityId == communityId && x.ResidentId == residentId)
-			.ToListAsync();
+					.Include(x => x.Resident)
+						.ThenInclude(x => x.CareTaskResidents)
+							.ThenInclude(x => x.CareTask)
+								.ThenInclude(x => x.CareTaskType)
+					.Include(x => x.Resident)
+						.ThenInclude(x => x.CareTaskResidents)
+							.ThenInclude(x => x.CareTask)
+								.ThenInclude(x => x.CareTaskStatus)
+					.Where(x => x.CommunityId == communityId && x.ResidentId == residentId)
+					.ToListAsync();
 		ResidentCareTasks? response = default;
 		if (residentCommunities is not null && residentCommunities.Any())
 		{
