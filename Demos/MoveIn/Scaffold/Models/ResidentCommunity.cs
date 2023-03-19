@@ -8,6 +8,7 @@ namespace Scaffold.Models
         public ResidentCommunity()
         {
             ResidentAncillaryCares = new HashSet<ResidentAncillaryCare>();
+            ResidentRooms = new HashSet<ResidentRoom>();
         }
 
         public int ResidentCommunityId { get; set; }
@@ -17,5 +18,6 @@ namespace Scaffold.Models
         public virtual Community Community { get; set; } = null!;
         public virtual Resident Resident { get; set; } = null!;
         public virtual ICollection<ResidentAncillaryCare> ResidentAncillaryCares { get; set; }
+        public virtual ICollection<ResidentRoom> ResidentRooms { get; set; }
     }
 }

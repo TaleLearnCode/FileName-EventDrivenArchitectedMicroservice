@@ -7,6 +7,7 @@ public partial class CareType
 {
 	public CareType()
 	{
+		ResidentRooms = new HashSet<ResidentRoom>();
 		RoomCareTypes = new HashSet<RoomCareType>();
 	}
 
@@ -44,5 +45,6 @@ public partial class CareType
 	/// </summary>
 	public int RowStatusId { get; set; }
 
+	public virtual ICollection<ResidentRoom> ResidentRooms { get; set; }
 	public virtual ICollection<RoomCareType> RoomCareTypes { get; set; }
 }

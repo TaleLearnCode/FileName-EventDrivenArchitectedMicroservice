@@ -10,6 +10,7 @@ namespace Scaffold.Models
     {
         public CareType()
         {
+            ResidentRooms = new HashSet<ResidentRoom>();
             RoomCareTypes = new HashSet<RoomCareType>();
         }
 
@@ -47,6 +48,7 @@ namespace Scaffold.Models
         /// </summary>
         public int RowStatusId { get; set; }
 
+        public virtual ICollection<ResidentRoom> ResidentRooms { get; set; }
         public virtual ICollection<RoomCareType> RoomCareTypes { get; set; }
     }
 }

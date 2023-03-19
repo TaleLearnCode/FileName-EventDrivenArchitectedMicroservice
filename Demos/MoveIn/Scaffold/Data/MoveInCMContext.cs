@@ -330,6 +330,18 @@ namespace Scaffold.Data
     }
 ));
 
+                entity.HasOne(d => d.CareType)
+                    .WithMany(p => p.ResidentRooms)
+                    .HasForeignKey(d => d.CareTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkResidentRoom_CareType");
+
+                entity.HasOne(d => d.ResidentCommunity)
+                    .WithMany(p => p.ResidentRooms)
+                    .HasForeignKey(d => d.ResidentCommunityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkResidentRoom_ResidentCommunity");
+
                 entity.HasOne(d => d.Room)
                     .WithMany(p => p.ResidentRooms)
                     .HasForeignKey(d => d.RoomId)
