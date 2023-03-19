@@ -1,4 +1,4 @@
-﻿namespace CM.Services.Requests;
+﻿namespace SLS.CM.Services.Requests;
 
 public class ResidentMoveInRequest
 {

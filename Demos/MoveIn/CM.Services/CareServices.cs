@@ -1,12 +1,12 @@
-﻿using CM.Services.Requests;
-using CM.Services.Responses;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SLS.CM.Data;
 using SLS.CM.Domain;
+using SLS.CM.Services.Requests;
+using SLS.CM.Services.Responses;
 using SLS.Common.Services;
 using SLS.Common.Services.Extensions;
 
-namespace CM.Services;
+namespace SLS.CM.Services;
 
 public class CareServices : ServicesBase, ICareServices
 {
@@ -131,6 +131,8 @@ public class CareServices : ServicesBase, ICareServices
 	{
 		Resident? resident = await cmContext.Residents
 			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
+				.ThenInclude(x => x.Community)
+			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
 				.ThenInclude(x => x.ResidentRooms)
 					.ThenInclude(x => x.Room)
 			.Include(x => x.ResidentCommunities.Where(x => x.CommunityId == communityId))
@@ -150,7 +152,7 @@ public class CareServices : ServicesBase, ICareServices
 				FirstName = resident.FirstName,
 				MiddleName = resident.MiddleName,
 				LastName = resident.LastName,
-				DateOfBirth = DateOnly.FromDateTime(resident.DateOfBirth)
+				DateOfBirth = resident.DateOfBirth
 			};
 			if (resident.ResidentCommunities is not null && resident.ResidentCommunities.Any())
 			{

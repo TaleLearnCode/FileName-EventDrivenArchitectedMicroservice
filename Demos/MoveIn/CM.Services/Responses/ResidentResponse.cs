@@ -1,4 +1,4 @@
-﻿namespace CM.Services.Responses;
+﻿namespace SLS.CM.Services.Responses;
 
 public class ResidentResponse
 {
@@ -6,6 +6,6 @@ public class ResidentResponse
 	public string? FirstName { get; set; }
 	public string? MiddleName { get; set; }
 	public string? LastName { get; set; }
-	public DateOnly DateOfBirth { get; set; }
+	public DateTime DateOfBirth { get; set; }
 	public List<ResidentCommunityResponse>? Communities { get; set; }
 }

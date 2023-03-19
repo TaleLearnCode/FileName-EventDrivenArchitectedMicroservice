@@ -1,4 +1,4 @@
-﻿namespace CM.Services.Responses;
+﻿namespace SLS.CM.Services.Responses;
 
 public class ResidentCommunityResponse
 {

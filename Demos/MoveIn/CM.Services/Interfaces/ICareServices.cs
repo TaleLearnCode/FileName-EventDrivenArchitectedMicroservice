@@ -1,7 +1,7 @@
-﻿using CM.Services.Requests;
-using CM.Services.Responses;
+﻿using SLS.CM.Services.Requests;
+using SLS.CM.Services.Responses;
 
-namespace CM.Services;
+namespace SLS.CM.Services;
 
 public interface ICareServices
 {
