@@ -71,6 +71,7 @@ public class CareServices : ServicesBase, ICareServices
 		{
 			resident?.ResidentCommunities.Add(new()
 			{
+				ResidentId = residentMoveInRequest.ResidentId,
 				CommunityId = residentMoveInRequest.CommunityId
 			});
 			await cmContext.SaveChangesAsync();
