@@ -62,17 +62,18 @@
     <Folder Include="Tables" />
     <Folder Include="Tables\Core" />
     <Folder Include="Scripts" />
-    <Folder Include="Scripts\Core" />
-    <Folder Include="Scripts\Core\Populate" />
     <Folder Include="Tables\LM" />
     <Folder Include="Tables\PM" />
     <Folder Include="Tables\RM" />
+    <Folder Include="Scripts\Populate" />
+    <Folder Include="Scripts\Populate\Core" />
+    <Folder Include="Scripts\CustomerData" />
+    <Folder Include="Scripts\CustomerData\PM" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Schemas\LM.sql" />
     <Build Include="Schemas\Core.sql" />
     <Build Include="Tables\Core\RowStatus.sql" />
-    <None Include="Scripts\Core\Populate\Populate_RowStatus.sql" />
     <Build Include="Tables\LM\LeaseType.sql" />
     <Build Include="Tables\LM\LeaseTermType.sql" />
     <Build Include="Tables\LM\Lease.sql" />
@@ -80,18 +81,19 @@
     <Build Include="Schemas\PM.sql" />
     <Build Include="Tables\LM\Lessee.sql" />
     <Build Include="Tables\LM\ResponsibleParty.sql" />
-    <Build Include="Tables\Core\Country.sql" />
-    <Build Include="Tables\Core\CountryDivision.sql" />
     <Build Include="Tables\Core\Prefix.sql" />
     <Build Include="Tables\Core\Suffix.sql" />
     <Build Include="Schemas\RM.sql" />
-    <Build Include="Tables\RM\ResidentContact.sql" />
     <Build Include="Tables\RM\Resident.sql" />
+    <None Include="Scripts\Populate\Core\Populate_RowStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Beast.publish.xml" />
+    <None Include="Scripts\Populate\Core\Populate_Prefix.sql" />
+    <None Include="Scripts\Populate\Core\Populate_Suffix.sql" />
+    <None Include="Scripts\CustomerData\PM\CustomerData_Community.sql" />
   </ItemGroup>
 </Project>
