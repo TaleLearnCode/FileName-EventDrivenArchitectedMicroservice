@@ -66,16 +66,13 @@ AS SOURCE (CommunityId,
 ON TARGET.CommunityId = SOURCE.CommunityId
 WHEN MATCHED THEN UPDATE SET TARGET.CommunityNumber     = SOURCE.CommunityNumber,
                              TARGET.CommunityName       = SOURCE.CommunityName,
-                             TARGET.CommunityStatusId   = SOURCE.CommunityStatusId,
                              TARGET.RowStatusId         = SOURCE.RowStatusId
 WHEN NOT MATCHED THEN INSERT (CommunityId,
                               CommunityNumber,
                               CommunityName,
-                              CommunityStatusId,
                               RowStatusId)
                       VALUES (SOURCE.CommunityId,
                               SOURCE.CommunityNumber,
                               SOURCE.CommunityName,
-                              SOURCE.CommunityStatusId,
                               SOURCE.RowStatusId);
 GO

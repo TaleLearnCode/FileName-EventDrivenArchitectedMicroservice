@@ -8,12 +8,6 @@ namespace Scaffold.Models
     /// </summary>
     public partial class Community
     {
-        public Community()
-        {
-            ResidentCommunities = new HashSet<ResidentCommunity>();
-            Rooms = new HashSet<Room>();
-        }
-
         /// <summary>
         /// The identifier of the community record.
         /// </summary>
@@ -30,14 +24,9 @@ namespace Scaffold.Models
         /// URL of the digital asset that serves as the profile image for the community.
         /// </summary>
         public string? ProfileImageUrl { get; set; }
-        public int CommunityStatusId { get; set; }
         /// <summary>
         /// Identifier of the community record status (i.e. enabled, disabled, etc).
         /// </summary>
         public int RowStatusId { get; set; }
-
-        public virtual CommunityStatus CommunityStatus { get; set; } = null!;
-        public virtual ICollection<ResidentCommunity> ResidentCommunities { get; set; }
-        public virtual ICollection<Room> Rooms { get; set; }
     }
 }
