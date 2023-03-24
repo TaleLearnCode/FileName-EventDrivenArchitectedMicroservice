@@ -4,12 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>SLS.CM.Services</RootNamespace>
+    <RootNamespace>SLS.CM.Data</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CM.Data\CM.Data.csproj" />
-    <ProjectReference Include="..\Common\Common.Services\Common.Services.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CM.Domain\CM.Domain.csproj" />
   </ItemGroup>
 
 </Project>

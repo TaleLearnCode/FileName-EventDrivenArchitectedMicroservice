@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>SLS.CM.Services</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CM.Services\CM.Services.csproj" />
-    <ProjectReference Include="..\PortfolioManagement\PM.Services\PM.Services.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Services\Common.Services.csproj" />
+    <ProjectReference Include="..\CM.Data\CM.Data.csproj" />
   </ItemGroup>
 
 </Project>

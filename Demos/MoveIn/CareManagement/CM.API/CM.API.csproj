@@ -13,8 +13,8 @@
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CM.Services\CM.Services.csproj" />
     <ProjectReference Include="..\..\Common\Common.Azure.Functions\Common.Azure.Functions.csproj" />
+    <ProjectReference Include="..\CM.Services\CM.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

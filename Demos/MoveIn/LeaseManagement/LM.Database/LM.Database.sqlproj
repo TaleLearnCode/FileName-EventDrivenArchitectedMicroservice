@@ -100,5 +100,6 @@
     <None Include="Scripts\Populate\LM\Populate_LeaseTermType.sql" />
     <None Include="Scripts\CustomerData\LM\CustomerData_LeaseType.sql" />
     <None Include="Glennis.publish.xml" />
+    <None Include="Laptop.publish.xml" />
   </ItemGroup>
 </Project>
