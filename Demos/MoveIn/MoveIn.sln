@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RM.ServicesReference", "Res
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RM.FunctionsReference", "ResidentManagement\RM.FunctionsReference\RM.FunctionsReference.csproj", "{977DD2E1-9F26-4B0E-8656-E972B612526F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CM.EventHandler-Reference", "CareManagement\CM.EventHandler-Reference\CM.EventHandler-Reference.csproj", "{DBD5B423-57FB-4055-A724-79558563B284}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,10 @@ Global
 		{977DD2E1-9F26-4B0E-8656-E972B612526F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{977DD2E1-9F26-4B0E-8656-E972B612526F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{977DD2E1-9F26-4B0E-8656-E972B612526F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD5B423-57FB-4055-A724-79558563B284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD5B423-57FB-4055-A724-79558563B284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD5B423-57FB-4055-A724-79558563B284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD5B423-57FB-4055-A724-79558563B284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +235,7 @@ Global
 		{DAC2CDA2-99A2-4371-9CF1-02A001BBF4B9} = {4E58AB53-244E-47DD-A5EB-2465FAA8C817}
 		{B0C8478A-A826-46C1-9EDF-E5AE2AC8DAF4} = {4E58AB53-244E-47DD-A5EB-2465FAA8C817}
 		{977DD2E1-9F26-4B0E-8656-E972B612526F} = {4E58AB53-244E-47DD-A5EB-2465FAA8C817}
+		{DBD5B423-57FB-4055-A724-79558563B284} = {8D234976-F21E-4B83-B03F-BB5670D7CB58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3231667C-4A15-48DD-B0CE-68DC75053D8F}

@@ -1,7 +1,24 @@
-﻿namespace SLS.CM.Services.Requests;
+﻿using SLS.Common.Services.EventMessages;
+
+namespace SLS.CM.Services.Requests;
 
 public class ResidentMoveInRequest
 {
+
+	public ResidentMoveInRequest() { }
+
+	public ResidentMoveInRequest(ResidentMoveInEventMessage residentMoveInEventMessage, int roomId)
+	{
+		ResidentId = residentMoveInEventMessage.Resident?.ResidentId ?? 1;
+		CommunityId = residentMoveInEventMessage.CommunityId;
+		RoomId = roomId;
+		CareTypeId = 3;
+		FirstName = residentMoveInEventMessage.Resident?.FirstName ?? string.Empty;
+		MiddleName = residentMoveInEventMessage.Resident?.MiddleName;
+		LastName = residentMoveInEventMessage.Resident?.LastName ?? string.Empty;
+		DateOfBirth = residentMoveInEventMessage.Resident?.DateOfBirth ?? DateTime.MinValue;
+	}
+
 	public int ResidentId { get; set; }
 	public int CommunityId { get; set; }
 	public int RoomId { get; set; }
