@@ -149,5 +149,6 @@
     <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCareCategory.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCare.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_CommunityAncillaryCare.sql" />
+    <None Include="Laptop.publish.xml" />
   </ItemGroup>
 </Project>

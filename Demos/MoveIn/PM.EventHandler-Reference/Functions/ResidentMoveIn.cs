@@ -1,45 +1,41 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using SLS.CM.Services.Responses;
 using SLS.Common.Services.EventMessages;
 
-namespace SLS.CM.EventHandler;
+namespace PM.EventHandler_Reference;
 
 public class ResidentMoveIn
 {
 
 	private readonly ILogger _logger;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	private readonly ICareServices _careServices;
+	private readonly IRoomServices _roomServices;
+
+	private const int _roomOccupied = 1;
 
 	public ResidentMoveIn(
 		ILoggerFactory loggerFactory,
 		JsonSerializerOptions jsonSerializerOptions,
-		ICareServices careServices)
+		IRoomServices roomServices)
 	{
 		_logger = loggerFactory.CreateLogger<ResidentMoveIn>();
 		_jsonSerializerOptions = jsonSerializerOptions;
-		_careServices = careServices;
+		_roomServices = roomServices;
 	}
 
-	[Function("CM-ResidentMoveIn")]
-	public async Task RunAsync([EventHubTrigger("%MoveInEventHubName%", Connection = "EventHubConnectionString", ConsumerGroup = "care")] string[] messages)
+	[Function("PM-ResidentMoveIn")]
+	public async Task RunAsync([EventHubTrigger("%MoveInEventHubName%", Connection = "EventHubConnectionString", ConsumerGroup = "portfolio")] string[] messages)
 	{
 		foreach (string message in messages)
 		{
 			ResidentMoveInEventMessage? residentMoveInEventMessage = JsonSerializer.Deserialize<ResidentMoveInEventMessage>(message);
-			ResidentResponse? residentResponse = default;
 			if (residentMoveInEventMessage is not null)
 			{
 				_logger.LogInformation($"Processing Event Message: {residentMoveInEventMessage.MessageId}");
 				foreach (int roomId in residentMoveInEventMessage.Rooms.Select(x => x.RoomId))
-				{
-					residentResponse = await _careServices.ResidentMoveIn(new(residentMoveInEventMessage, roomId));
-				}
-				if (residentResponse is not null)
-					await _careServices.AssignCareTaskToNewResidentAsync(residentMoveInEventMessage.CommunityId, residentResponse.ResidentId);
+					await _roomServices.UpdateRoomAvailability(roomId, _roomOccupied);
 			}
-
 		}
 	}
+
 }
