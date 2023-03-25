@@ -1,6 +1,6 @@
 ﻿CREATE TABLE RM.ResidentCommunity
 (
-  ResidentCommunityId INT                                            NOT NULL,
+  ResidentCommunityId INT                                            NOT NULL IDENTITY(1,1),
   ResidentId          INT                                            NOT NULL,
   CommunityId         INT                                            NOT NULL,
   LeaseId             INT                                                NULL,

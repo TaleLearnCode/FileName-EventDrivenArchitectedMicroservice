@@ -5,7 +5,7 @@ using SLS.CM.Services.Requests;
 using SLS.CM.Services.Responses;
 using TaleLearnCode;
 
-namespace SLS.CM.Functions.Functions;
+namespace SLS.CM.Functions;
 
 public class ResidentMoveIn
 {

@@ -1,8 +1,6 @@
-﻿using SLS.LM.Services.Requests;
+﻿namespace SLS.RM.Services;
 
-namespace SLS.LM.Services;
-
-public class ResidentServices : ServicesBase
+public class ResidentServices : ServicesBase, IResidentServices
 {
 
 	public ResidentServices(string connectionString) : base(connectionString) { }
@@ -51,7 +49,8 @@ public class ResidentServices : ServicesBase
 		ResidentCommunity residentCommunity = new()
 		{
 			ResidentId = residentId,
-			CommunityId = communityId
+			CommunityId = communityId,
+			LeaseId = null
 		};
 		await rmContext.AddAsync(residentCommunity);
 		await rmContext.SaveChangesAsync();
@@ -63,7 +62,7 @@ public class ResidentServices : ServicesBase
 		foreach (MoveInRoomRequest moveInRoomRequest in moveInRoomRequests)
 			await rmContext.ResidentRooms.AddAsync(new()
 			{
-				ResidentCommunityId = residentCommunity.CommunityId,
+				ResidentCommunityId = residentCommunity.ResidentCommunityId,
 				RoomId = moveInRoomRequest.RoomId,
 				EffectiveDate = moveInRoomRequest.EffectiveDate,
 				Rate = moveInRoomRequest.Rate
@@ -172,15 +171,16 @@ public class ResidentServices : ServicesBase
 			.Include(x => x.ResidentCommunities)
 				.ThenInclude(x => x.ResidentRooms)
 					.ThenInclude(x => x.Room)
-			.Include(x => x.ResidentCommunities)
-				.ThenInclude(x => x.ResidentCareLevels)
-					.ThenInclude(x => x.CareLevel)
-			.Include(x => x.ResidentCommunities)
-				.ThenInclude(x => x.ResidentAncillaryCares)
-					.ThenInclude(x => x.AncillaryCare)
-						.ThenInclude(x => x.AncillaryCareCategory)
+			//.Include(x => x.ResidentCommunities)
+			//	.ThenInclude(x => x.ResidentCareLevels)
+			//		.ThenInclude(x => x.CareLevel)
+			//.Include(x => x.ResidentCommunities)
+			//	.ThenInclude(x => x.ResidentAncillaryCares)
+			//		.ThenInclude(x => x.AncillaryCare)
+			//			.ThenInclude(x => x.AncillaryCareCategory)
 			.Include(x => x.ResidentContacts)
 				.ThenInclude(x => x.ResidentContactType)
+					.ThenInclude(x => x.ResidentContactTypeRole)
 			.Include(x => x.ResidentContacts)
 				.ThenInclude(x => x.ResidentContactPhoneNumbers)
 					.ThenInclude(x => x.PhoneNumberType)
@@ -190,20 +190,30 @@ public class ResidentServices : ServicesBase
 			.FirstOrDefaultAsync(x => x.ResidentId == residentId);
 
 	private static ResidentResponse? BuildResidentResponse(Resident? resident)
-		=> (resident is null) ? null : new ResidentResponse()
+	{
+		ResidentResponse? response = default;
+		if (resident is not null)
 		{
-			ResidentId = resident.ResidentId,
-			FirstName = resident.FirstName,
-			MiddleName = resident.MiddleName,
-			LastName = resident.LastName,
-			DateOfBirth = resident.DateOfBirth,
-			ResidentCommunities = BuildResidentCommunityResponseList(resident.ResidentCommunities),
-			Contacts = BuildResidentContactResponseList(resident.ResidentContacts)
-		};
+			response = new ResidentResponse()
+			{
+				ResidentId = resident.ResidentId,
+				FirstName = resident.FirstName,
+				MiddleName = resident.MiddleName,
+				LastName = resident.LastName,
+				DateOfBirth = resident.DateOfBirth,
+				ResidentCommunities = BuildResidentCommunityResponseList(resident.ResidentCommunities),
+				Contacts = BuildResidentContactResponseList(resident.ResidentContacts)
+			};
+		}
+		return response;
+	}
 
 	private static List<ResidentCommunityResponse> BuildResidentCommunityResponseList(ICollection<ResidentCommunity>? residentCommunities)
 	{
 		List<ResidentCommunityResponse> response = new();
+
+
+
 		if (residentCommunities is not null && residentCommunities.Any())
 			foreach (ResidentCommunity residentCommunity in residentCommunities)
 				response.Add(BuildResidentCommunityResponse(residentCommunity));

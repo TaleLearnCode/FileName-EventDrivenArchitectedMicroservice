@@ -76,7 +76,6 @@ public class RMContext : DbContext
 	public virtual DbSet<ResidentPhoneNumberType> ResidentPhoneNumberTypes { get; set; } = null!;
 	public virtual DbSet<ResidentPostalAddressType> ResidentPostalAddressTypes { get; set; } = null!;
 	public virtual DbSet<ResidentRoom> ResidentRooms { get; set; } = null!;
-	public virtual DbSet<ResidentRoomHistory> ResidentRoomHistories { get; set; } = null!;
 	public virtual DbSet<Room> Rooms { get; set; } = null!;
 	public virtual DbSet<RowStatus> RowStatuses { get; set; } = null!;
 	public virtual DbSet<Suffix> Suffixes { get; set; } = null!;

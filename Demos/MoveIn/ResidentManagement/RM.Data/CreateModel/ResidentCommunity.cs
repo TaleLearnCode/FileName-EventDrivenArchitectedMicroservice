@@ -24,8 +24,6 @@ internal static partial class CreateModel
 			}
 ));
 
-			entity.Property(e => e.ResidentCommunityId).ValueGeneratedNever();
-
 			entity.HasOne(d => d.Community)
 					.WithMany(p => p.ResidentCommunities)
 					.HasForeignKey(d => d.CommunityId)

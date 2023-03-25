@@ -12,7 +12,7 @@ public partial class ResidentCommunity
 	public int ResidentCommunityId { get; set; }
 	public int ResidentId { get; set; }
 	public int CommunityId { get; set; }
-	public int LeaseId { get; set; }
+	public int? LeaseId { get; set; }
 
 	public virtual Community Community { get; set; } = null!;
 	public virtual Lease Lease { get; set; } = null!;
