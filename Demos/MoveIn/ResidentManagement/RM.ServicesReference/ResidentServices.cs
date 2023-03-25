@@ -11,9 +11,7 @@ public class ResidentServices : ServicesBase, IResidentServices
 
 	private readonly string _eventHubConnectionString;
 
-	public ResidentServices(
-		string connectionString,
-		string eventHubConnectionString) : base(connectionString)
+	public ResidentServices(string connectionString, string eventHubConnectionString) : base(connectionString)
 		=> _eventHubConnectionString = eventHubConnectionString;
 
 	public async Task<ResidentResponse?> GetResidentAsync(int residentId)
@@ -214,6 +212,7 @@ public class ResidentServices : ServicesBase, IResidentServices
 				LeaseTypeId = moveInRequest.Lease?.LeaseTypeId ?? 1,
 				StartDate = moveInRequest.Lease?.StartDate ?? DateTime.UtcNow,
 				EndDate = moveInRequest.Lease?.EndDate ?? DateTime.UtcNow,
+				Rate = moveInRequest.Rooms.Sum(x => x.Rate),
 				LesseeFirstName = moveInRequest.Lease?.LesseeFirstName,
 				LesseeMiddleName = moveInRequest.Lease?.LesseeMiddleName,
 				LesseeEmail = moveInRequest.Lease?.LesseeLastName,

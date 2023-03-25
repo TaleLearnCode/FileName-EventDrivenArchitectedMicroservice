@@ -1,6 +1,6 @@
 ﻿CREATE TABLE LM.ResponsibleParty
 (
-  ResponsiblePartyId INT           NOT NULL,
+  ResponsiblePartyId INT           NOT NULL IDENTITY(1,1),
   ExternalId         NVARCHAR(100)     NULL,
   FirstName          NVARCHAR(100)     NULL,
   MiddleName         NVARCHAR(100)     NULL,
