@@ -1,9 +1,19 @@
-﻿namespace SLS.RM.Services;
+﻿using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using System.Text;
+using System.Text.Json;
+
+namespace SLS.RM.Services;
 
 public class ResidentServices : ServicesBase, IResidentServices
 {
 
-	public ResidentServices(string connectionString) : base(connectionString) { }
+	private readonly string _eventHubConnectionString;
+
+	public ResidentServices(
+		string connectionString,
+		string eventHubConnectionString) : base(connectionString)
+		=> _eventHubConnectionString = eventHubConnectionString;
 
 	public async Task<ResidentResponse?> GetResidentAsync(int residentId)
 	{
@@ -11,10 +21,33 @@ public class ResidentServices : ServicesBase, IResidentServices
 		return BuildResidentResponse(await GetResidentDataAsync(residentId, rmContext));
 	}
 
-	public async Task<int> MoveInResidentAsync(MoveInRequest moveInRequest)
+	public async Task<int> MoveInResidentAsync(MoveInRequest moveInRequest, string eventHubName)
 	{
 		using RMContext rmContext = new(_connectionString);
-		return await CreateResidentAsync(rmContext, moveInRequest);
+		int response = await CreateResidentAsync(rmContext, moveInRequest);
+		await SendMoveInMessage(moveInRequest, eventHubName);
+		return response;
+	}
+
+	private async Task SendMoveInMessage(MoveInRequest moveInRequest, string eventHubName)
+	{
+		await using EventHubProducerClient producerClient = new EventHubProducerClient(_eventHubConnectionString, eventHubName);
+		// Create a batch of events
+		using EventDataBatch eventDataBatch = await producerClient.CreateBatchAsync();
+
+		if (!eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(moveInRequest)))))
+			// if it is too large for the batch
+			throw new Exception($"Event is too large for the batch and cannot be sent.");
+
+		try
+		{
+			// Use the producer client to send the batch of events to the event hub
+			await producerClient.SendAsync(eventDataBatch);
+		}
+		finally
+		{
+			await producerClient.CloseAsync();
+		}
 	}
 
 	private static async Task<int> CreateResidentAsync(RMContext rmContext, MoveInRequest moveInRequest)

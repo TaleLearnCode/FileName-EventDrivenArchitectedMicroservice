@@ -23,8 +23,9 @@ public class MoveInResident
 	{
 		try
 		{
+			string? eventHubName = Environment.GetEnvironmentVariable("MoveInEventHubName") ?? throw new Exception("Failed to retrieve the event hub name.");
 			MoveInRequest moveInRequest = await request.GetRequestParametersAsync<MoveInRequest>(_jsonSerializerOptions);
-			int response = await _residentServices.MoveInResidentAsync(moveInRequest);
+			int response = await _residentServices.MoveInResidentAsync(moveInRequest, eventHubName);
 			return request.CreateCreatedResponse($"residents/{response}");
 		}
 		catch (Exception ex) when (ex is ArgumentNullException)

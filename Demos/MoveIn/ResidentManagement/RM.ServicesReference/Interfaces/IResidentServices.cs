@@ -3,5 +3,5 @@
 public interface IResidentServices
 {
 	Task<ResidentResponse?> GetResidentAsync(int residentId);
-	Task<int> MoveInResidentAsync(MoveInRequest moveInRequest);
+	Task<int> MoveInResidentAsync(MoveInRequest moveInRequest, string eventHubName);
 }

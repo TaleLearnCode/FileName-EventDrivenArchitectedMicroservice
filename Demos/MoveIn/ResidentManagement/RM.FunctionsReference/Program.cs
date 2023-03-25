@@ -1,4 +1,5 @@
 string? connectionString = Environment.GetEnvironmentVariable("RM-ConnectionString");
+string? eventHubConnectionString = Environment.GetEnvironmentVariable("EventHubConnectionString");
 
 var host = new HostBuilder()
 	.ConfigureFunctionsWorkerDefaults()
@@ -14,8 +15,8 @@ var host = new HostBuilder()
 				WriteIndented = true
 			};
 		});
-		if (connectionString is not null)
-			s.AddSingleton<IResidentServices>((s) => { return new ResidentServices(connectionString); });
+		if (connectionString is not null && eventHubConnectionString is not null)
+			s.AddSingleton<IResidentServices>((s) => { return new ResidentServices(connectionString, eventHubConnectionString); });
 	})
 	.Build();
 

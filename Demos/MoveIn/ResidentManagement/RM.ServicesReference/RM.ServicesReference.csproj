@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" Version="5.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Services\Common.Services.csproj" />
     <ProjectReference Include="..\RM.Data\RM.Data.csproj" />
   </ItemGroup>
