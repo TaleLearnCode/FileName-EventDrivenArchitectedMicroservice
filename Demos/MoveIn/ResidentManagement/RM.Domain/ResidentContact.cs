@@ -12,7 +12,6 @@ public partial class ResidentContact
 	public string? ExternalId { get; set; }
 	public int ResidentId { get; set; }
 	public int ResidentContactTypeId { get; set; }
-	public int RelationId { get; set; }
 	public int? SuffixId { get; set; }
 	public string? FirstName { get; set; }
 	public string? MiddleName { get; set; }

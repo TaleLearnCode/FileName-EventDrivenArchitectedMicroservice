@@ -1,6 +1,6 @@
 ﻿CREATE TABLE RM.ResidentPostalAddressType
 (
-	PostalAddressTypeId   INT           NOT NULL IDENTITY (1,1),
+	PostalAddressTypeId   INT           NOT NULL,
 	ExternalId            NVARCHAR(100)     NULL,
 	PostalAddressTypeName VARCHAR(100)  NOT NULL,
 	SortOrder             INT               NULL,

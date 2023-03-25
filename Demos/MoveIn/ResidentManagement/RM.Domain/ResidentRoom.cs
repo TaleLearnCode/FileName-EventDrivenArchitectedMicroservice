@@ -9,4 +9,5 @@ public partial class ResidentRoom
 	public DateTime EffectiveDate { get; set; }
 
 	public virtual Room Room { get; set; } = null!;
+	public virtual ResidentCommunity ResidentCommunity { get; set; } = null!;
 }

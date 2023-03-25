@@ -6,6 +6,7 @@ public partial class ResidentCommunity
 	{
 		ResidentAncillaryCares = new HashSet<ResidentAncillaryCare>();
 		ResidentCareLevels = new HashSet<ResidentCareLevel>();
+		ResidentRooms = new HashSet<ResidentRoom>();
 	}
 
 	public int ResidentCommunityId { get; set; }
@@ -18,4 +19,5 @@ public partial class ResidentCommunity
 	public virtual Resident Resident { get; set; } = null!;
 	public virtual ICollection<ResidentAncillaryCare> ResidentAncillaryCares { get; set; }
 	public virtual ICollection<ResidentCareLevel> ResidentCareLevels { get; set; }
+	public virtual ICollection<ResidentRoom> ResidentRooms { get; set; }
 }

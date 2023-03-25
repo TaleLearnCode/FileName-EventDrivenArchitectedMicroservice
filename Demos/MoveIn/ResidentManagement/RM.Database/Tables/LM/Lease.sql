@@ -1,6 +1,6 @@
 ﻿CREATE TABLE LM.Lease
 (
-  LeaseId     INT           NOT NULL IDENTITY(1,1),
+  LeaseId     INT           NOT NULL,
   ExternalId  NVARCHAR(100) NOT NULL,
   ResidentId  INT           NOT NULL,
   StartDate   DATE          NOT NULL,

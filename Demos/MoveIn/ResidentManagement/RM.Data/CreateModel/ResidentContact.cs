@@ -27,12 +27,6 @@ internal static partial class CreateModel
 					.HasForeignKey(d => d.ResidentContactTypeId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("fkResidentContact_ContactType");
-
-			entity.HasOne(d => d.Resident)
-					.WithMany(p => p.ResidentContacts)
-					.HasForeignKey(d => d.ResidentId)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("fkResidentContact_Resident");
 		});
 	}
 

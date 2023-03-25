@@ -33,6 +33,13 @@ internal static partial class CreateModel
 					.HasForeignKey(d => d.RoomId)
 					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("fkResidentRoom_Room");
+
+			entity.HasOne(d => d.ResidentCommunity)
+					.WithMany(p => p.ResidentRooms)
+					.HasForeignKey(d => d.ResidentCommunityId)
+					.OnDelete(DeleteBehavior.ClientSetNull)
+					.HasConstraintName("fkResidentRoom_ResidentCommunity");
+
 		});
 	}
 

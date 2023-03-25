@@ -1,6 +1,6 @@
 ﻿CREATE TABLE RM.ResidentPhoneNumberType
 (
-	PhoneNumberTypeId   INT           NOT NULL IDENTITY (1, 1),
+	PhoneNumberTypeId   INT           NOT NULL,
 	ExternalId          NVARCHAR(100)     NULL,
 	PhoneNumberTypeName VARCHAR(100)  NOT NULL,
 	SortOrder           INT               NULL,

@@ -117,6 +117,7 @@
     <None Include="Scripts\CustomerData\PM\CustomerData_CommunityStatus.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_PayorType.sql" />
     <None Include="Scripts\CustomerData\RM\CustomerData_Resident.sql" />
+    <None Include="Scripts\Populate\RM\Populate_ResidentContactTypeRole.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Beast.publish.xml" />
@@ -127,6 +128,9 @@
     <None Include="Scripts\CustomerData\PM\CustomerData_Room.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCareCategory.sql" />
     <None Include="Scripts\CustomerData\PM\CustomerData_AncillaryCare.sql" />
+    <None Include="Scripts\Populate\RM\Populate_ResidentContactType.sql" />
+    <None Include="Scripts\Populate\RM\Populate_ResidentPhoneNumberType.sql" />
+    <None Include="Scripts\Populate\RM\Populate_ResidentPostalAddressType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
