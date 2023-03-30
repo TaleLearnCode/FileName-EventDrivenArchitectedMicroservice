@@ -1,4 +1,4 @@
-﻿namespace SLS.LM.Services.Responses;
+﻿namespace SLS.RM.Services.Responses;
 
 public class ResidentCareTypeResponse
 {

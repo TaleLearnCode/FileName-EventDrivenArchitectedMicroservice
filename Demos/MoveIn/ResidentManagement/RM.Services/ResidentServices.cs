@@ -1,11 +1,18 @@
-﻿using SLS.LM.Services.Requests;
+﻿using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using SLS.Common.Services.EventMessages;
+using System.Text;
+using System.Text.Json;
 
-namespace SLS.LM.Services;
+namespace SLS.RM.Services;
 
-public class ResidentServices : ServicesBase
+public class ResidentServices : ServicesBase, IResidentServices
 {
 
-	public ResidentServices(string connectionString) : base(connectionString) { }
+	private readonly string _eventHubConnectionString;
+
+	public ResidentServices(string connectionString, string eventHubConnectionString) : base(connectionString)
+		=> _eventHubConnectionString = eventHubConnectionString;
 
 	public async Task<ResidentResponse?> GetResidentAsync(int residentId)
 	{
@@ -13,11 +20,35 @@ public class ResidentServices : ServicesBase
 		return BuildResidentResponse(await GetResidentDataAsync(residentId, rmContext));
 	}
 
-	public async Task<int> MoveInResidentAsync(MoveInRequest moveInRequest)
+	public async Task<int> MoveInResidentAsync(MoveInRequest moveInRequest, string eventHubName)
 	{
 		using RMContext rmContext = new(_connectionString);
-		return await CreateResidentAsync(rmContext, moveInRequest);
+		int residentId = await CreateResidentAsync(rmContext, moveInRequest);
+		await SendMoveInMessage(eventHubName, moveInRequest, residentId);
+		return residentId;
 	}
+
+	private async Task SendMoveInMessage(string eventHubName, MoveInRequest moveInRequest, int residentId)
+	{
+		await using EventHubProducerClient producerClient = new(_eventHubConnectionString, eventHubName);
+		// Create a batch of events
+		using EventDataBatch eventDataBatch = await producerClient.CreateBatchAsync();
+
+		if (!eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(GenerateResidentMoveInEventMessage(moveInRequest, residentId))))))
+			// if it is too large for the batch
+			throw new Exception($"Event is too large for the batch and cannot be sent.");
+
+		try
+		{
+			// Use the producer client to send the batch of events to the event hub
+			await producerClient.SendAsync(eventDataBatch);
+		}
+		finally
+		{
+			await producerClient.CloseAsync();
+		}
+	}
+
 
 	private static async Task<int> CreateResidentAsync(RMContext rmContext, MoveInRequest moveInRequest)
 	{
@@ -51,7 +82,8 @@ public class ResidentServices : ServicesBase
 		ResidentCommunity residentCommunity = new()
 		{
 			ResidentId = residentId,
-			CommunityId = communityId
+			CommunityId = communityId,
+			LeaseId = null
 		};
 		await rmContext.AddAsync(residentCommunity);
 		await rmContext.SaveChangesAsync();
@@ -63,7 +95,7 @@ public class ResidentServices : ServicesBase
 		foreach (MoveInRoomRequest moveInRoomRequest in moveInRoomRequests)
 			await rmContext.ResidentRooms.AddAsync(new()
 			{
-				ResidentCommunityId = residentCommunity.CommunityId,
+				ResidentCommunityId = residentCommunity.ResidentCommunityId,
 				RoomId = moveInRoomRequest.RoomId,
 				EffectiveDate = moveInRoomRequest.EffectiveDate,
 				Rate = moveInRoomRequest.Rate
@@ -163,6 +195,88 @@ public class ResidentServices : ServicesBase
 		}
 	}
 
+	private static ResidentMoveInEventMessage GenerateResidentMoveInEventMessage(MoveInRequest moveInRequest, int residentId)
+	{
+		return new()
+		{
+			CommunityId = moveInRequest.CommunityId,
+			Resident = new()
+			{
+				ResidentId = residentId,
+				FirstName = moveInRequest.Resident?.FirstName,
+				MiddleName = moveInRequest.Resident?.MiddleName,
+				LastName = moveInRequest.Resident?.LastName,
+				DateOfBirth = moveInRequest.Resident?.DateOfBirth ?? DateTime.UtcNow
+			},
+			Lease = new()
+			{
+				LeaseTypeId = moveInRequest.Lease?.LeaseTypeId ?? 1,
+				StartDate = moveInRequest.Lease?.StartDate ?? DateTime.UtcNow,
+				EndDate = moveInRequest.Lease?.EndDate ?? DateTime.UtcNow,
+				Rate = moveInRequest.Rooms.Sum(x => x.Rate),
+				LesseeFirstName = moveInRequest.Lease?.LesseeFirstName,
+				LesseeMiddleName = moveInRequest.Lease?.LesseeMiddleName,
+				LesseeEmail = moveInRequest.Lease?.LesseeLastName,
+				PostalAddress = new()
+				{
+					StreetAddress1 = moveInRequest.Lease?.PostalAddress?.StreetAddress1,
+					StreetAddress2 = moveInRequest.Lease?.PostalAddress?.StreetAddress2,
+					City = moveInRequest.Lease?.PostalAddress?.City,
+					CountryDivision = moveInRequest.Lease?.PostalAddress?.CountryDivision,
+					Country = moveInRequest.Lease?.PostalAddress?.Country,
+					PostalCode = moveInRequest.Lease?.PostalAddress?.PostalCode
+				},
+				PhoneNumber = new()
+				{
+					PhoneNumberTypeId = moveInRequest.Lease?.PhoneNumber?.PhoneNumberTypeId ?? 1,
+					CountryCode = moveInRequest.Lease?.PhoneNumber?.CountryCode,
+					PhoneNumber = moveInRequest.Lease?.PhoneNumber?.PhoneNumber,
+					IsDefault = moveInRequest.Lease?.PhoneNumber?.IsDefault ?? true
+				}
+			},
+			Rooms = GenerateMoveInRoomEventMessage(moveInRequest),
+			ResponsibleParty = new()
+			{
+				FirstName = moveInRequest.ResponsibleParty?.FirstName,
+				MiddleName = moveInRequest.ResponsibleParty?.MiddleName,
+				LastName = moveInRequest.ResponsibleParty?.LastName,
+				PostalAddress = new()
+				{
+					StreetAddress1 = moveInRequest.ResponsibleParty?.PostalAddress?.StreetAddress1,
+					StreetAddress2 = moveInRequest.ResponsibleParty?.PostalAddress?.StreetAddress2,
+					City = moveInRequest.ResponsibleParty?.PostalAddress?.City,
+					CountryDivision = moveInRequest.ResponsibleParty?.PostalAddress?.CountryDivision,
+					Country = moveInRequest.ResponsibleParty?.PostalAddress?.Country,
+					PostalCode = moveInRequest.ResponsibleParty?.PostalAddress?.PostalCode
+				},
+				PhoneNumber = new()
+				{
+					PhoneNumberTypeId = moveInRequest.ResponsibleParty?.PhoneNumber?.PhoneNumberTypeId ?? 1,
+					CountryCode = moveInRequest.ResponsibleParty?.PhoneNumber?.CountryCode,
+					PhoneNumber = moveInRequest.ResponsibleParty?.PhoneNumber?.PhoneNumber,
+					IsDefault = moveInRequest.ResponsibleParty?.PhoneNumber?.IsDefault ?? true
+				},
+				HasPowerOfAttorney = moveInRequest.ResponsibleParty?.HasPowerOfAttorney ?? false,
+				HasDurablePowerOfAttorney = moveInRequest.ResponsibleParty?.HasDurablePowerOfAttorney ?? false,
+				IsLegalGuardian = moveInRequest.ResponsibleParty?.IsLegalGuardian ?? false,
+				IsMedicalPowerOfAttorney = moveInRequest.ResponsibleParty?.IsMedicalPowerOfAttorney ?? false
+			}
+		};
+	}
+
+	private static List<MoveInRoomEventMessage> GenerateMoveInRoomEventMessage(MoveInRequest moveInRequest)
+	{
+		List<MoveInRoomEventMessage> response = new();
+		foreach (MoveInRoomRequest moveInRoomRequest in moveInRequest.Rooms)
+			response.Add(new()
+			{
+				RoomId = moveInRoomRequest.RoomId,
+				EffectiveDate = moveInRoomRequest.EffectiveDate,
+				Rate = moveInRoomRequest.Rate
+			});
+		return response;
+	}
+
 	private static async Task<Resident?> GetResidentDataAsync(int residentId, RMContext rmContext)
 		=> await rmContext.Residents
 			.Include(x => x.ResidentCommunities)
@@ -172,15 +286,16 @@ public class ResidentServices : ServicesBase
 			.Include(x => x.ResidentCommunities)
 				.ThenInclude(x => x.ResidentRooms)
 					.ThenInclude(x => x.Room)
-			.Include(x => x.ResidentCommunities)
-				.ThenInclude(x => x.ResidentCareLevels)
-					.ThenInclude(x => x.CareLevel)
-			.Include(x => x.ResidentCommunities)
-				.ThenInclude(x => x.ResidentAncillaryCares)
-					.ThenInclude(x => x.AncillaryCare)
-						.ThenInclude(x => x.AncillaryCareCategory)
+			//.Include(x => x.ResidentCommunities)
+			//	.ThenInclude(x => x.ResidentCareLevels)
+			//		.ThenInclude(x => x.CareLevel)
+			//.Include(x => x.ResidentCommunities)
+			//	.ThenInclude(x => x.ResidentAncillaryCares)
+			//		.ThenInclude(x => x.AncillaryCare)
+			//			.ThenInclude(x => x.AncillaryCareCategory)
 			.Include(x => x.ResidentContacts)
 				.ThenInclude(x => x.ResidentContactType)
+					.ThenInclude(x => x.ResidentContactTypeRole)
 			.Include(x => x.ResidentContacts)
 				.ThenInclude(x => x.ResidentContactPhoneNumbers)
 					.ThenInclude(x => x.PhoneNumberType)
@@ -190,20 +305,30 @@ public class ResidentServices : ServicesBase
 			.FirstOrDefaultAsync(x => x.ResidentId == residentId);
 
 	private static ResidentResponse? BuildResidentResponse(Resident? resident)
-		=> (resident is null) ? null : new ResidentResponse()
+	{
+		ResidentResponse? response = default;
+		if (resident is not null)
 		{
-			ResidentId = resident.ResidentId,
-			FirstName = resident.FirstName,
-			MiddleName = resident.MiddleName,
-			LastName = resident.LastName,
-			DateOfBirth = resident.DateOfBirth,
-			ResidentCommunities = BuildResidentCommunityResponseList(resident.ResidentCommunities),
-			Contacts = BuildResidentContactResponseList(resident.ResidentContacts)
-		};
+			response = new ResidentResponse()
+			{
+				ResidentId = resident.ResidentId,
+				FirstName = resident.FirstName,
+				MiddleName = resident.MiddleName,
+				LastName = resident.LastName,
+				DateOfBirth = resident.DateOfBirth,
+				ResidentCommunities = BuildResidentCommunityResponseList(resident.ResidentCommunities),
+				Contacts = BuildResidentContactResponseList(resident.ResidentContacts)
+			};
+		}
+		return response;
+	}
 
 	private static List<ResidentCommunityResponse> BuildResidentCommunityResponseList(ICollection<ResidentCommunity>? residentCommunities)
 	{
 		List<ResidentCommunityResponse> response = new();
+
+
+
 		if (residentCommunities is not null && residentCommunities.Any())
 			foreach (ResidentCommunity residentCommunity in residentCommunities)
 				response.Add(BuildResidentCommunityResponse(residentCommunity));
@@ -311,4 +436,5 @@ public class ResidentServices : ServicesBase
 				});
 		return response;
 	}
+
 }

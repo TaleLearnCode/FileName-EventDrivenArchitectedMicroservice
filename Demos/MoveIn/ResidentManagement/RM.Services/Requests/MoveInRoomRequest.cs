@@ -1,4 +1,4 @@
-﻿namespace SLS.LM.Services.Requests;
+﻿namespace SLS.RM.Services.Requests;
 
 public class MoveInRoomRequest
 {
