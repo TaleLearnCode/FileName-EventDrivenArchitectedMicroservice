@@ -38,4 +38,7 @@ Starting with an empty Visual Studio solution, during this session we will build
 
 | Event | Location | Date | Time | Room | Downloads |
 |-------|:--------:|-----:|-----:|-----:|----------:|
+| [Nebraska.Code()](https://nebraskacode.amegala.com/) | Lincoln, NE | July 19 - 21, 2023 | TBA | TBA | Available Afterwards |
+| [Scenic City Summit](https://sceniccitysummit.com/) | Chattanooga, TN | June 2, 2023 | TBA | TBA | Available Afterwards |
 | [Serverless Architecture Conference](https://serverless-architecture.io/london/) | London, UK | April 25, 2023 | 16:15 BST | TBA | Available Afterwards |
+| [Orlando Code Camp](https://orlandocodecamp.com/) | Sanford, FL | March 25, 2023 | 2:30 PM EDT | 2207 | [Slides](https://github.com/TaleLearnCode/FileNew-EventDrivenArchitectedMicroservice/blob/main/Presentations/FileNew-EventDrivenArchitectedMicroservice-Orlando.pdf) [Demo](https://github.com/TaleLearnCode/FileNew-EventDrivenArchitectedMicroservice/tree/main/Demos/MoveIn) | 
