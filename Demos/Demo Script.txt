@@ -1,0 +1,469 @@
+--> Create the EventHub Namespace
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+--> Create the EventHub
+
+residentmovein
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+--> Create the Consumer Groups
+
+care
+lease
+portfolio
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+--> Open Common.Services - ServicesBase.cs; add 
+
+	protected async Task SendMessageToEventHubAsync(string eventHubName, string message)
+	{
+		await using EventHubProducerClient producerClient = new(_eventHubConnectionString, eventHubName);
+		// Create a batch of events
+		using EventDataBatch eventDataBatch = await producerClient.CreateBatchAsync();
+
+		if (!eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(message))))
+			// if it is too large for the batch
+			throw new Exception($"Event is too large for the batch and cannot be sent.");
+
+		try
+		{
+			// Use the producer client to send the batch of events to the event hub
+			await producerClient.SendAsync(eventDataBatch);
+		}
+		finally
+		{
+			await producerClient.CloseAsync();
+		}
+	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Navigate to Common.Services - EventMessages - ResidentMoveInEventMessage.cs
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Open RM.Services - ResidentSerices.cs
+
+>> Show ResidentMoveInEventMessage
+
+>> Add MoveInResidentAsync
+
+	public async Task<int> MoveInResidentAsync(MoveInRequest moveInRequest, string eventHubName)
+	{
+		using RMContext rmContext = new(_connectionString);
+		int residentId = await CreateResidentAsync(rmContext, moveInRequest);
+		await SendMessageToEventHubAsync(JsonSerializer.Serialize(GenerateResidentMoveInEventMessage(moveInRequest, residentId)));
+		return residentId;
+	}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Create RM.Functions
+
+Add the following project references:
+
+Common.Azure.Functions
+RM.SericesReference
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Update Program.cs
+
+
+string? connectionString = Environment.GetEnvironmentVariable("RM-ConnectionString");
+string? eventHubConnectionString = Environment.GetEnvironmentVariable("EventHubConnectionString");
+
+var host = new HostBuilder()
+	.ConfigureFunctionsWorkerDefaults()
+	.ConfigureServices(s =>
+	{
+		s.AddSingleton((s) =>
+		{
+			return new JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+				WriteIndented = true
+			};
+		});
+		if (connectionString is not null && eventHubConnectionString is not null)
+			s.AddSingleton<IResidentServices>((s) => { return new ResidentServices(connectionString, eventHubConnectionString); });
+	})
+	.Build();
+
+host.Run();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Update local.settings.json
+
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "RM-ConnectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MoveIn-RM;Integrated Security=True",
+    "EventHubConnectionString": "CONNECTIONSTRING",
+    "MoveInEventHubName": "residentmovein"
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Create Functions/MoveInResident.cs
+
+namespace SLS.RM.Functions;
+
+public class MoveInResident
+{
+
+	private readonly ILogger _logger;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
+	private readonly IResidentServices _residentServices;
+
+	public MoveInResident(
+		ILoggerFactory loggerFactory,
+		JsonSerializerOptions jsonSerializerOptions,
+		IResidentServices residentServices)
+	{
+		_logger = loggerFactory.CreateLogger<MoveInResident>();
+		_jsonSerializerOptions = jsonSerializerOptions;
+		_residentServices = residentServices;
+	}
+
+	[Function("ResidentMoveIn")]
+	public async Task<HttpResponseData> RunAsync(
+		[HttpTrigger(AuthorizationLevel.Function, "post", Route = "residents")] HttpRequestData request)
+	{
+		try
+		{
+			string? eventHubName = Environment.GetEnvironmentVariable("MoveInEventHubName") ?? throw new Exception("Failed to retrieve the event hub name.");
+			MoveInRequest moveInRequest = await request.GetRequestParametersAsync<MoveInRequest>(_jsonSerializerOptions);
+			int response = await _residentServices.MoveInResidentAsync(moveInRequest, eventHubName);
+			return request.CreateCreatedResponse($"residents/{response}");
+		}
+		catch (Exception ex) when (ex is ArgumentNullException)
+		{
+			return request.CreateBadRequestResponse(ex);
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Unexpected exception: {ExceptionMessage}", ex.Message);
+			return request.CreateErrorResponse(ex);
+		}
+	}
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Create CM.EventHandler
+
+Add project reference to CM.Services
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Uplodate local.settings.json
+
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "CM-ConnectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MoveIn-CM;Integrated Security=True",
+    "EventHubConnectionString": "CONNECTIONSTRING",
+    "MoveInEventHubName": "residentmovein"
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+--> Update Program.cs
+
+string? connectionString = Environment.GetEnvironmentVariable("CM-ConnectionString");
+
+var host = new HostBuilder()
+	.ConfigureFunctionsWorkerDefaults()
+	.ConfigureServices(s =>
+	{
+		s.AddSingleton((s) =>
+		{
+			return new JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+				WriteIndented = true
+			};
+		});
+		if (connectionString is not null)
+			s.AddSingleton<ICareServices>((s) => { return new CareServices(connectionString); });
+	})
+	.Build();
+
+host.Run();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Add ResidentMoveIn.cs
+
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using SLS.CM.Services.Responses;
+using SLS.Common.Services.EventMessages;
+
+namespace SLS.CM.EventHandler;
+
+public class ResidentMoveIn
+{
+
+	private readonly ILogger _logger;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
+	private readonly ICareServices _careServices;
+
+	public ResidentMoveIn(
+		ILoggerFactory loggerFactory,
+		JsonSerializerOptions jsonSerializerOptions,
+		ICareServices careServices)
+	{
+		_logger = loggerFactory.CreateLogger<ResidentMoveIn>();
+		_jsonSerializerOptions = jsonSerializerOptions;
+		_careServices = careServices;
+	}
+
+	[Function("CM-ResidentMoveIn")]
+	public async Task RunAsync([EventHubTrigger("%MoveInEventHubName%", Connection = "EventHubConnectionString", ConsumerGroup = "care")] string[] messages)
+	{
+		foreach (string message in messages)
+		{
+			ResidentMoveInEventMessage? residentMoveInEventMessage = JsonSerializer.Deserialize<ResidentMoveInEventMessage>(message);
+			ResidentResponse? residentResponse = default;
+			if (residentMoveInEventMessage is not null)
+			{
+				_logger.LogInformation($"Processing Event Message: {residentMoveInEventMessage.MessageId}");
+				foreach (int roomId in residentMoveInEventMessage.Rooms.Select(x => x.RoomId))
+				{
+					residentResponse = await _careServices.ResidentMoveIn(new(residentMoveInEventMessage, roomId));
+				}
+				if (residentResponse is not null)
+					await _careServices.AssignCareTaskToNewResidentAsync(residentMoveInEventMessage.CommunityId, residentResponse.ResidentId);
+			}
+
+		}
+	}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Create LM.EventHandler
+
+Add project reference to LM.Services
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Upldate local.settings.json
+
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "LM-ConnectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MoveIn-LM;Integrated Security=True",
+    "EventHubConnectionString": "CONNECTIONSTRING",
+    "MoveInEventHubName": "residentmovein"
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Update Program.cs
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SLS.LM.Services;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+string? connectionString = Environment.GetEnvironmentVariable("LM-ConnectionString");
+
+var host = new HostBuilder()
+	.ConfigureFunctionsWorkerDefaults()
+	.ConfigureServices(s =>
+	{
+		s.AddSingleton((s) =>
+		{
+			return new JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+				WriteIndented = true
+			};
+		});
+		if (connectionString is not null)
+			s.AddSingleton<ILeaseServices>((s) => { return new LeaseServices(connectionString); });
+	})
+	.Build();
+
+host.Run();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Add Functions\ResidentMoveIn.cs
+
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using SLS.Common.Services.EventMessages;
+using SLS.LM.Services;
+using System.Text.Json;
+
+namespace LM.EventHandler;
+
+public class ResidentMoveIn
+{
+
+	private readonly ILogger _logger;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
+	private readonly ILeaseServices _leaseServices;
+
+	public ResidentMoveIn(
+		ILoggerFactory loggerFactory,
+		JsonSerializerOptions jsonSerializerOptions,
+		ILeaseServices leaseServices)
+	{
+		_logger = loggerFactory.CreateLogger<ResidentMoveIn>();
+		_jsonSerializerOptions = jsonSerializerOptions;
+		_leaseServices = leaseServices;
+	}
+
+	[Function("LM-ResidentMoveIn")]
+	public async Task RunAsync([EventHubTrigger("%MoveInEventHubName%", Connection = "EventHubConnectionString", ConsumerGroup = "lease")] string[] messages)
+	{
+		foreach (string message in messages)
+		{
+			ResidentMoveInEventMessage? residentMoveInEventMessage = JsonSerializer.Deserialize<ResidentMoveInEventMessage>(message);
+			if (residentMoveInEventMessage is not null)
+			{
+				_logger.LogInformation($"Processing Event Message: {residentMoveInEventMessage.MessageId}");
+				await _leaseServices.InitializeLeaseAsync(new(residentMoveInEventMessage));
+			}
+		}
+	}
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Create PM.EventHandler
+
+Add project reference to PM.Services
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Upldate local.settings.json
+
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "PM-ConnectionString": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MoveIn-PM;Integrated Security=True",
+    "EventHubConnectionString": "CONNECTIONSTRING",
+    "MoveInEventHubName": "residentmovein"
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Update Program.cs
+
+string? connectionString = Environment.GetEnvironmentVariable("PM-ConnectionString");
+
+var host = new HostBuilder()
+	.ConfigureFunctionsWorkerDefaults()
+	.ConfigureServices(s =>
+	{
+		s.AddSingleton((s) =>
+		{
+			return new JsonSerializerOptions()
+			{
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+				WriteIndented = true
+			};
+		});
+		if (connectionString is not null)
+			s.AddSingleton<IRoomServices>((s) => { return new RoomServices(connectionString); });
+	})
+	.Build();
+
+host.Run();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+--> Add Functions/ResidentMoveIn.cs
+
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
+using SLS.Common.Services.EventMessages;
+
+namespace PM.EventHandler;
+
+public class ResidentMoveIn
+{
+
+	private readonly ILogger _logger;
+	private readonly JsonSerializerOptions _jsonSerializerOptions;
+	private readonly IRoomServices _roomServices;
+
+	private const int _roomOccupied = 1;
+
+	public ResidentMoveIn(
+		ILoggerFactory loggerFactory,
+		JsonSerializerOptions jsonSerializerOptions,
+		IRoomServices roomServices)
+	{
+		_logger = loggerFactory.CreateLogger<ResidentMoveIn>();
+		_jsonSerializerOptions = jsonSerializerOptions;
+		_roomServices = roomServices;
+	}
+
+	[Function("PM-ResidentMoveIn")]
+	public async Task RunAsync([EventHubTrigger("%MoveInEventHubName%", Connection = "EventHubConnectionString", ConsumerGroup = "portfolio")] string[] messages)
+	{
+		foreach (string message in messages)
+		{
+			ResidentMoveInEventMessage? residentMoveInEventMessage = JsonSerializer.Deserialize<ResidentMoveInEventMessage>(message);
+			if (residentMoveInEventMessage is not null)
+			{
+				_logger.LogInformation($"Processing Event Message: {residentMoveInEventMessage.MessageId}");
+				foreach (int roomId in residentMoveInEventMessage.Rooms.Select(x => x.RoomId))
+					await _roomServices.UpdateRoomAvailability(roomId, _roomOccupied);
+			}
+		}
+	}
+
+}
