@@ -39,6 +39,7 @@ Starting with an empty Visual Studio solution, during this session we will build
 | Event | Location | Date | Time | Room | Downloads |
 |-------|:--------:|-----:|-----:|-----:|----------:|
 | [Atlanta Developers' Conference](https://www.atldevcon.com/) | Atlanta, GA | September 9, 2023 | 1:15 pm EDT | 314 | Available Afterwards |
+| [dev up](https://www.devupconf.com) | St. Charles, MO | August 28, 2023 | 9:45 am CDT |  D1 | [Slides](Presentations/FileNew-EventDrivenArchitectedMicroservice_DevUp.pdf) |
 | [Nebraska.Code()](https://nebraskacode.amegala.com/) | Lincoln, NE | July 19 - 21, 2023 | TBA | TBA | [Slides](Presentations/FileNew-EventDrivenArchitectedMicroservice-NebraskaCode.pdf) |
 | [Scenic City Summit](https://sceniccitysummit.com/) [Appearance Cancelled] | Chattanooga, TN | June 2, 2023 | TBA | TBA | N/A |
 | [Serverless Architecture Conference](https://serverless-architecture.io/london/) | London, UK | April 25, 2023 | 16:00 BST | Albert 3 | [Slides](https://github.com/TaleLearnCode/FileNew-EventDrivenArchitectedMicroservice/blob/main/Presentations/FileNew-EventDrivenArchitectedMicroservice_SACLondon.pdf) |
