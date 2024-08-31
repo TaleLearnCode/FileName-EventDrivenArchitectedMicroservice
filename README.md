@@ -39,6 +39,17 @@ Starting with an empty Visual Studio solution, during this session we will build
 ## Who Should Attend
 This session is ideal for software developers and architects who are looking to enhance their skills in building event-driven microservices. Whether you are new to microservices or looking to refine your approach, this session will provide valuable insights and practical techniques.
 
+## Prerequisites
+To get the most out of the “Building an Event-Driven Microservice from Scratch” presentation, it would be beneficial to have the following prerequisites:
+
+- **Basic Programming Knowledge**: Proficiency in a programming language such as C#, Java, or Python, as the session involves hands-on coding.
+Familiarity with Visual Studio: Experience using Visual Studio or a similar integrated development environment (IDE) will help you follow along with the practical aspects of the session.
+- **Understanding of Microservices**: Basic knowledge of microservices architecture, including concepts like service decomposition, inter-service communication, and scalability.
+- **Knowledge of Cloud Services**: Basic understanding of cloud services and deployment, as the session may cover deploying microservices to cloud platforms.
+- **Interest in Software Architecture**: A keen interest in learning about software architecture and design patterns will make the session more engaging and beneficial.
+
+These prerequisites will ensure you can fully engage with the material and apply the knowledge effectively in your projects. Are you excited about diving into event-driven microservices?
+
 ## Presentations
 
 | Event | Location | Date | Time | Room | Downloads |
